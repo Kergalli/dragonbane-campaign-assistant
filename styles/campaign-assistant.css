@@ -1,0 +1,422 @@
+/**
+ * Dragonbane Campaign Assistant - Focused Styles
+ */
+
+/* Session Advancement Dialog */
+.dragonbane.campaign-assistant.session-advancement {
+  font-family: 'Lora', 'Palatino Linotype', serif;
+}
+
+.session-advancement-content {
+  padding: 0.5rem;
+}
+
+.actor-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem 0;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid rgba(0, 96, 77, 0.3);
+}
+
+.actor-header .actor-token {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.actor-header h2 {
+  margin: 0;
+  font-family: 'Modesto Condensed', 'Palatino Linotype', serif;
+  color: #00604d;
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0.35rem 0;
+  position: relative;
+}
+
+.step-indicator .step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  position: relative;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.step-indicator .step.active {
+  opacity: 1;
+}
+
+/* Connector lines between steps */
+.step-indicator .step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 60%;
+  width: 80%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 0;
+}
+
+.step-indicator .step.active:not(:last-child)::after {
+  background: #00604d;
+}
+
+.step-indicator .step-number {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.step-indicator .step.active .step-number {
+  background: #00604d;
+  color: white;
+  border-color: #00604d;
+}
+
+.step-indicator .step-label {
+  font-size: 0.85rem;
+  text-align: center;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Step Hint - centered below step indicator */
+.step-hint {
+  text-align: center;
+  margin: 0.25rem 0 0.5rem 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #666;
+  min-height: 1.2rem;
+}
+
+/* Marks Available Counter */
+.marks-available {
+  background: rgba(0, 96, 77, 0.1);
+  border-left: 3px solid #00604d;
+  padding: 0.5rem;
+  margin: 0.35rem 0;
+  border-radius: 4px;
+}
+
+.marks-available strong {
+  color: #00604d;
+}
+
+/* Consolidated Section Headings */
+.section-heading {
+  color: #00604d;
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin: 0 0 0.35rem 0;
+}
+
+/* Step Content */
+.step-content {
+  padding: 0.35rem 0;
+  min-height: 280px;
+}
+
+/* Empty State Messages */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Questions Section */
+.questions-section {
+  margin-bottom: 0.5rem;
+}
+
+.questions {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.35rem 0;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.25rem;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.question:hover {
+  background: rgba(0, 96, 77, 0.1);
+}
+
+.question input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.question span {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+/* Weakness Question with Radio Buttons */
+.weakness-question {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Weakness Display - now inside weakness-question */
+.weakness-question .weakness-display {
+  background: rgba(0, 96, 77, 0.1);
+  border-left: 3px solid #00604d;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.weakness-question .weakness-display .weakness-text {
+  display: inline;
+}
+
+.weakness-question .weakness-display .weakness-text p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+/* Rules Reminder */
+.rules-reminder {
+  text-align: center;
+  margin: 0.75rem 0 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #666;
+}
+
+.weakness-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.weakness-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.25rem;
+  border-radius: 3px;
+  transition: background 0.2s;
+  background: transparent;
+}
+
+.weakness-option:hover {
+  background: rgba(0, 96, 77, 0.1);
+}
+
+.weakness-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.weakness-option span {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.weakness-option em {
+  color: #00604d;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+/* Skill Sections */
+.unmarked-skills-section,
+.marked-skills-section {
+  margin-bottom: 0.5rem;
+}
+
+/* Skill List - scoped to session advancement dialog */
+.session-advancement .skill-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  padding: 0.4rem;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Better scrollbar styling */
+.session-advancement .skill-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.session-advancement .skill-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.session-advancement .skill-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 96, 77, 0.5);
+  border-radius: 4px;
+}
+
+.session-advancement .skill-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 96, 77, 0.7);
+}
+
+.session-advancement .skill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 0.25rem 0;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.session-advancement .skill-item:hover {
+  background: rgba(65, 105, 225, 0.1);
+  transform: translateX(2px);
+}
+
+.session-advancement .skill-item.selected {
+  background: rgba(0, 96, 77, 0.2);
+  border-left: 3px solid #00604d;
+}
+
+.session-advancement .skill-item.selected .fa-check-circle {
+  color: #00604d;
+}
+
+.session-advancement .skill-item.marked {
+  background: rgba(65, 105, 225, 0.2);
+  border-left: 3px solid #4169e1;
+  cursor: default;
+}
+
+.session-advancement .skill-item.marked:hover {
+  transform: none;
+}
+
+.session-advancement .skill-item.newly-marked {
+  background: rgba(0, 96, 77, 0.2);
+  border-left: 3px solid #00604d;
+  cursor: default;
+}
+
+.session-advancement .skill-item.newly-marked:hover {
+  transform: none;
+}
+
+.session-advancement .skill-name {
+  font-weight: bold;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.session-advancement .skill-name .fa-graduation-cap {
+  color: #00604d;
+  font-size: 0.9rem;
+}
+
+.session-advancement .skill-level {
+  color: #666;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+.session-advancement .skill-item i {
+  color: #228b22;
+}
+
+.session-advancement .skill-item.marked i {
+  color: #4169e1;
+}
+
+/* Form Footer - uses Dragonbane's built-in button styling */
+.session-advancement .form-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Match Dragonbane form-footer button styling */
+.session-advancement .form-footer button {
+  font-family: var(--dod-font-heading) !important;
+  font-weight: normal !important;
+  font-size: 1rem !important;
+  padding: 20px !important;
+  line-height: normal !important;
+}
+
+.session-advancement .form-footer button:hover {
+  color: whitesmoke;
+  background: url("../../../systems/dragonbane/art/ui/button-bg.webp");
+  background-repeat: repeat-x;
+  background-size: cover;
+  background-clip: border-box;
+}
+
+/* Character Sheet Button - Window Header Icon */
+.session-advancement-control {
+  cursor: pointer;
+}
+
+.session-advancement-control i {
+  margin: 0;
+}
+
+/* Chat Message Styling */
+.dragonbane.campaign-assistant.session-summary {
+  padding: 0.75rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #00604d;
+}
+
+.dragonbane.campaign-assistant.session-summary h3 {
+  margin: 0 0 0.5rem 0;
+  color: #00604d;
+  font-family: 'Modesto Condensed', 'Palatino Linotype', serif;
+}
+
+.dragonbane.campaign-assistant.session-summary p {
+  margin: 0.25rem 0;
+}

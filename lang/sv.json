@@ -1,0 +1,134 @@
+{
+  "CAMPAIGN_ASSISTANT": {
+    "settings": {
+      "enabled": {
+        "name": "Aktivera Kampanjassistent",
+        "hint": "Huvudbrytare för kampanjassistentmodulen"
+      },
+      "addActorButtons": {
+        "name": "Lägg till Karaktärsarknopar",
+        "hint": "Lägg till Sessionsutveckling-knapp på karaktärsark (kräver omladdning)"
+      },
+      "trackSessionHistory": {
+        "name": "Spåra Sessionshistorik",
+        "hint": "Spara sessionsutvecklingshistorik i aktörflaggor"
+      },
+      "useWeaknessRule": {
+        "name": "Använd Valfri Svaghet-regel",
+        "hint": "Aktivera svaghetsfrågan i sessionsutveckling (valfri regel från regelboken)"
+      },
+      "hideParticipated": {
+        "name": "Dölj 'Deltog du i spelsessionen?'",
+        "hint": "Dölj denna utvecklingsfråga från dialogen"
+      },
+      "hideExplored": {
+        "name": "Dölj 'Utforskade du en ny plats?'",
+        "hint": "Dölj denna utvecklingsfråga från dialogen"
+      },
+      "hideDefeated": {
+        "name": "Dölj 'Besegrade du en eller flera farliga motståndare?'",
+        "hint": "Dölj denna utvecklingsfråga från dialogen"
+      },
+      "hideOvercame": {
+        "name": "Dölj 'Övervann du ett hinder utan att använda våld?'",
+        "hint": "Dölj denna utvecklingsfråga från dialogen"
+      },
+      "customQuestions": {
+        "name": "Anpassade Utvecklingsfrågor",
+        "hint": "Lägg till anpassade utvecklingsfrågor separerade med semikolon. Varje 'ja'-svar ger 1 utvecklingsmarkering. Exempel: Rollspelade du din karaktärs personlighet?; Bidrog du till gruppens framgång?; Bidrog du till berättelsen?"
+      },
+      "debugMode": {
+        "name": "Felsökningsläge",
+        "hint": "Aktivera detaljerad konsolloggning för felsökning"
+      }
+    },
+
+    "questions": {
+      "participated": "Deltog du i spelsessionen?",
+      "explored": "Utforskade du en ny plats?",
+      "defeated": "Besegrade du en eller flera farliga motståndare?",
+      "overcame": "Övervann du ett hinder utan att använda våld?",
+      "weaknessLabel": "Hur engagerade du dig med din svaghet?",
+      "weaknessNone": "Engagerade inte med svaghet",
+      "weaknessGaveIn": "Gav efter för din svaghet",
+      "weaknessOvercame": "Handlade mot din svaghet"
+    },
+
+    "sections": {
+      "questions": "Utvecklingsfrågor",
+      "selectSkills": "Välj Färdigheter att Markera för Utveckling",
+      "markedSkills": "Färdigheter Redo att Slå för Utveckling"
+    },
+
+    "steps": {
+      "questions": "Frågor",
+      "select": "Välj Färdigheter",
+      "roll": "Redo att Slå"
+    },
+
+    "instructions": {
+      "questions": "Svara på frågorna nedan. Varje 'ja' ger dig en utvecklingsmarkering att använda.",
+      "selectMore": "Klicka på färdigheter för att välja dem för markering. Du har markeringar kvar.",
+      "readyToMark": "Klicka på 'Markera Valda Färdigheter' när du är redo att fortsätta.",
+      "readyToRoll": "Klicka på 'Slå All Utveckling' för att slå för alla markerade färdigheter.",
+      "advancementRule": "Om tärningen överstiger din nuvarande färdighetsnivå, ökas färdigheten med ett, upp till maximalt 18.",
+      "noMarksToUse": "Inga utvecklingsmarkeringar tillgängliga. Klicka på 'Nästa' för att fortsätta till rullning.",
+      "noSkills": "Inga färdigheter tillgängliga att markera. Svara på frågorna först för att tjäna markeringar, eller återvänd till ditt karaktärsark för att rensa några befintliga markeringar.",
+      "noMarkedSkills": "Inga färdigheter är för närvarande markerade för utveckling. Använd steget 'Välj Färdigheter' för att markera några, eller markera dem på ditt karaktärsark."
+    },
+
+    "labels": {
+      "marksAvailable": "Utvecklingsmarkeringar Tillgängliga",
+      "marksEarned": "Utvecklingsmarkeringar Intjänade",
+      "level": "Nivå",
+      "yourWeakness": "Din Svaghet"
+    },
+
+    "buttons": {
+      "sessionAdvancement": "Sessionsutveckling",
+      "markSelected": "Markera Valda Färdigheter",
+      "rollAdvancement": "Slå All Utveckling",
+      "next": "Nästa"
+    },
+
+    "dialog": {
+      "confirmRoll": {
+        "title": "Bekräfta Utvecklingsslag",
+        "content": "Slå utveckling för {count} markerade färdigheter?",
+        "yes": "Slå Alla",
+        "no": "Avbryt"
+      },
+      "removeWeakness": {
+        "title": "Ta Bort Svaghet",
+        "content": "Du har övervunnit din svaghet! Ta bort den från ditt karaktärsark? Du måste spela en hel session utan svaghet, sedan kan du välja en ny.",
+        "yes": "Ta Bort Svaghet",
+        "no": "Behåll Den"
+      }
+    },
+
+    "chat": {
+      "sessionSummary": {
+        "title": "Sessionsutveckling - {actor}",
+        "marksUsed": "Utvecklingsmarkeringar använda: {count}",
+        "skillsAdvanced": "Färdigheter utvecklade: {count}",
+        "heroicAbilitiesGained": "Heroiska Förmågor erhållna: {count}",
+        "maxSkillLevel": "Max Färdighetsnivå"
+      }
+    },
+
+    "notifications": {
+      "weaknessRemoved": "Svaghet borttagen från karaktärsarket. Kom ihåg att spela en hel session innan du väljer en ny!",
+      "skillMaxed": "{skill} har nått maximal nivå 18 för {actor}! 🎉"
+    },
+
+    "warnings": {
+      "noMoreMarks": "Inga fler utvecklingsmarkeringar tillgängliga",
+      "noMarkedSkills": "Inga färdigheter markerade för utveckling",
+      "noSkillsSelected": "Välj minst en färdighet att markera"
+    },
+
+    "errors": {
+      "socketlibRequired": "Kampanjassistent kräver socketlib-modulen"
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "CAMPAIGN_ASSISTANT": {
+    "settings": {
+      "enabled": {
+        "name": "Enable Campaign Assistant",
+        "hint": "Master toggle for the Campaign Assistant module"
+      },
+      "addActorButtons": {
+        "name": "Add Character Sheet Buttons",
+        "hint": "Add Session Advancement button to character sheets (requires reload)"
+      },
+      "trackSessionHistory": {
+        "name": "Track Session History",
+        "hint": "Save session advancement history in actor flags"
+      },
+      "useWeaknessRule": {
+        "name": "Use Weakness Optional Rule",
+        "hint": "Enable the weakness question in session advancement (optional rule from rulebook)"
+      },
+      "hideParticipated": {
+        "name": "Hide 'Did you participate in the game session?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "hideExplored": {
+        "name": "Hide 'Did you explore a new location?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "hideDefeated": {
+        "name": "Hide 'Did you defeat one or more dangerous adversaries?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "hideOvercame": {
+        "name": "Hide 'Did you overcome an obstacle without using force?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "customQuestions": {
+        "name": "Custom Advancement Questions",
+        "hint": "Add custom advancement questions separated by semicolons. Each 'yes' answer grants 1 mark. Example: Did you roleplay your character well?; Did you help the party succeed?; Did you contribute to the story?"
+      },
+      "debugMode": {
+        "name": "Debug Mode",
+        "hint": "Enable detailed console logging for troubleshooting"
+      }
+    },
+
+    "questions": {
+      "participated": "Did you participate in the game session?",
+      "explored": "Did you explore a new location?",
+      "defeated": "Did you defeat one or more dangerous adversaries?",
+      "overcame": "Did you overcome an obstacle without using force?",
+      "weaknessLabel": "How did you engage with your weakness?",
+      "weaknessNone": "Did not engage with weakness",
+      "weaknessGaveIn": "Gave in to your weakness",
+      "weaknessOvercame": "Acted against your weakness"
+    },
+
+    "sections": {
+      "questions": "Advancement Questions",
+      "selectSkills": "Select Skills to Mark for Advancement",
+      "markedSkills": "Skills Ready to Roll for Advancement"
+    },
+
+    "steps": {
+      "questions": "Questions",
+      "select": "Select Skills",
+      "roll": "Ready to Roll"
+    },
+
+    "instructions": {
+      "questions": "Answer the questions below. Each 'yes' gives you one advancement mark to use.",
+      "selectMore": "Click skills to select them for marking. You have marks remaining.",
+      "readyToMark": "Click 'Mark Selected Skills' when ready to proceed.",
+      "readyToRoll": "Click 'Roll All Advancement' to roll for all marked skills.",
+      "advancementRule": "If the roll exceeds your current skill level, the skill is increased by one, up to a maximum of 18.",
+      "noMarksToUse": "No advancement marks available. Click 'Next' to proceed to rolling.",
+      "noSkills": "No skills available to mark. Answer the questions first to earn marks, or return to your character sheet to clear some existing marks.",
+      "noMarkedSkills": "No skills are currently marked for advancement. Use the 'Select Skills' step to mark some, or mark them on your character sheet."
+    },
+
+    "labels": {
+      "marksAvailable": "Advancement Marks Available",
+      "marksEarned": "Advancement Marks Earned",
+      "level": "Level",
+      "yourWeakness": "Your Weakness"
+    },
+
+    "buttons": {
+      "sessionAdvancement": "Session Advancement",
+      "markSelected": "Mark Selected Skills",
+      "rollAdvancement": "Roll All Advancement",
+      "next": "Next"
+    },
+
+    "dialog": {
+      "confirmRoll": {
+        "title": "Confirm Advancement Rolls",
+        "content": "Roll advancement for {count} marked skills?",
+        "yes": "Roll All",
+        "no": "Cancel"
+      },
+      "removeWeakness": {
+        "title": "Remove Weakness",
+        "content": "You have overcome your weakness! Remove it from your character sheet? You must play a full session without a weakness, then you may choose a new one.",
+        "yes": "Remove Weakness",
+        "no": "Keep It"
+      }
+    },
+
+    "chat": {
+      "sessionSummary": {
+        "title": "Session Advancement - {actor}",
+        "marksUsed": "Advancement marks used: {count}",
+        "skillsAdvanced": "Skills advanced: {count}",
+        "heroicAbilitiesGained": "Heroic Abilities gained: {count}",
+        "maxSkillLevel": "Max Skill Level"
+      }
+    },
+
+    "notifications": {
+      "weaknessRemoved": "Weakness removed from character sheet. Remember to play a full session before choosing a new one!",
+      "skillMaxed": "{skill} has reached maximum level 18 for {actor}! 🎉"
+    },
+
+    "warnings": {
+      "noMoreMarks": "No more advancement marks available",
+      "noMarkedSkills": "No skills marked for advancement",
+      "noSkillsSelected": "Please select at least one skill to mark"
+    },
+
+    "errors": {
+      "socketlibRequired": "Campaign Assistant requires the socketlib module"
+    }
+  }
+}
