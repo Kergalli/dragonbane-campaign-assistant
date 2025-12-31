@@ -132,4 +132,7 @@ Implements the complete session-end advancement system from page 29 of the Drago
 
 ## ⚖️ **License & Disclaimer**
 
-MIT License. This is an unofficial, fan-created module. Not affiliated with Free League Publishing. Dragonbane™ is a trademark of Free League Publishing.
+MIT License. 
+
+This VTT module is not affiliated with, sponsored, or endorsed by Fria Ligan AB.
+This Supplement was created under Fria Ligan AB’s [Dragonbane Third Party Supplement License](https://freeleaguepublishing.com/wp-content/uploads/2023/11/Dragonbane-License-Agreement.pdf).
