@@ -52,7 +52,7 @@ Implements the complete session-end advancement system from page 29 of the Drago
 
 **Visual Polish:**
 
-- **Color-coded skills** - Blue for pre-marked skills, teal for newly selected skills
+- **Color-coded skills** - Teal-colored skills track new skills that were selected during advancement
 - **Graduation cap icons** - Visual indicator for skills trained with a teacher
 - **Dynamic counters** - Real-time display of remaining advancement marks
 
