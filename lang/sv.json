@@ -54,12 +54,6 @@
       "weaknessOvercame": "Handlade mot din svaghet"
     },
 
-    "sections": {
-      "questions": "Utvecklingsfrågor",
-      "selectSkills": "Välj Färdigheter att Markera för Utveckling",
-      "markedSkills": "Färdigheter Redo att Slå för Utveckling"
-    },
-
     "steps": {
       "questions": "Frågor",
       "select": "Välj Färdigheter",
@@ -71,10 +65,10 @@
       "selectMore": "Klicka på färdigheter för att välja dem för markering. Du har markeringar kvar.",
       "readyToMark": "Klicka på 'Markera Valda Färdigheter' när du är redo att fortsätta.",
       "readyToRoll": "Klicka på 'Slå All Utveckling' för att slå för alla markerade färdigheter.",
-      "advancementRule": "Om tärningen överstiger din nuvarande färdighetsnivå, ökas färdigheten med ett, upp till maximalt 18.",
-      "noMarksToUse": "Inga utvecklingsmarkeringar tillgängliga. Klicka på 'Nästa' för att fortsätta till rullning.",
+      "advancementRule": "Om slaget överträffar din nuvarande färdighetsnivå ökas färdigheten med ett, upp till ett maximum av 18.",
+      "noMarksToUse": "Inga utvecklingsmarkeringar tillgängliga. Klicka på 'Nästa' för att fortsätta till slagning.",
       "noSkills": "Inga färdigheter tillgängliga att markera. Svara på frågorna först för att tjäna markeringar, eller återvänd till ditt karaktärsark för att rensa några befintliga markeringar.",
-      "noMarkedSkills": "Inga färdigheter är för närvarande markerade för utveckling. Använd steget 'Välj Färdigheter' för att markera några, eller markera dem på ditt karaktärsark."
+      "noMarkedSkills": "Inga färdigheter är för närvarande markerade för utveckling. Använd 'Välj Färdigheter'-steget för att markera några, eller markera dem på ditt karaktärsark."
     },
 
     "labels": {
@@ -88,21 +82,22 @@
       "sessionAdvancement": "Sessionsutveckling",
       "markSelected": "Markera Valda Färdigheter",
       "rollAdvancement": "Slå All Utveckling",
-      "next": "Nästa"
+      "next": "Nästa",
+      "cancel": "Avbryt"
     },
 
     "dialog": {
       "confirmRoll": {
-        "title": "Bekräfta Utvecklingsslag",
-        "content": "Slå utveckling för {count} markerade färdigheter?",
-        "yes": "Slå Alla",
+        "title": "Bekräfta utvecklingskast",
+        "content": "Slå utvecklingskast för {count} markerade färdigheter?",
+        "yes": "Slå alla",
         "no": "Avbryt"
       },
       "removeWeakness": {
-        "title": "Ta Bort Svaghet",
-        "content": "Du har övervunnit din svaghet! Ta bort den från ditt karaktärsark? Du måste spela en hel session utan svaghet, sedan kan du välja en ny.",
-        "yes": "Ta Bort Svaghet",
-        "no": "Behåll Den"
+        "title": "Ta bort svaghet",
+        "content": "Du har övervunnit din svaghet! Ta bort den från ditt karaktärsblad? Du måste spela en hel session utan svaghet innan du kan välja en ny.",
+        "yes": "Ta bort svaghet",
+        "cancel": "Avbryt"
       }
     },
 
@@ -111,24 +106,24 @@
         "title": "Sessionsutveckling - {actor}",
         "marksUsed": "Utvecklingsmarkeringar använda: {count}",
         "skillsAdvanced": "Färdigheter utvecklade: {count}",
-        "heroicAbilitiesGained": "Heroiska Förmågor erhållna: {count}",
-        "maxSkillLevel": "Max Färdighetsnivå"
+        "heroicAbilitiesGained": "Heroiska förmågor erhållna: {count}",
+        "maxSkillLevel": "Maximal Färdighetsnivå"
       }
     },
 
     "notifications": {
-      "weaknessRemoved": "Svaghet borttagen från karaktärsarket. Kom ihåg att spela en hel session innan du väljer en ny!",
-      "skillMaxed": "{skill} har nått maximal nivå 18 för {actor}! 🎉"
+      "weaknessRemoved": "Svaghet borttagen från karaktärsblad. Kom ihåg att spela en hel session innan du väljer en ny!",
+      "skillMaxed": "{skill} har nått maximala nivån 18 för {actor}! 🎉"
     },
 
     "warnings": {
       "noMoreMarks": "Inga fler utvecklingsmarkeringar tillgängliga",
       "noMarkedSkills": "Inga färdigheter markerade för utveckling",
-      "noSkillsSelected": "Välj minst en färdighet att markera"
+      "noSkillsSelected": "Vänligen välj minst en färdighet att markera"
     },
 
     "errors": {
-      "socketlibRequired": "Kampanjassistent kräver socketlib-modulen"
+      "socketlibRequired": "Campaign Assistant kräver socketlib-modulen"
     }
   }
 }

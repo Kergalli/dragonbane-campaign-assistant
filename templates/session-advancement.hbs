@@ -38,36 +38,44 @@
     {{#if isStep3}}
       {{#if hasMarkedSkills}}
       <em>{{localize "CAMPAIGN_ASSISTANT.instructions.readyToRoll"}}</em>
-      {{else}}
-      <em>{{localize "CAMPAIGN_ASSISTANT.instructions.noMarkedSkills"}}</em>
       {{/if}}
     {{/if}}
   </div>
 
   {{!-- Marks Available Counter - only on steps 1 & 2 --}}
   {{#unless isStep3}}
-  {{#if isStep2}}
-  {{#if (gte marksRemaining 0)}}
-  <div class="marks-available">
-    <strong>{{localize "CAMPAIGN_ASSISTANT.labels.marksAvailable"}}: {{marksRemaining}}</strong>
+  <div class="marks-counter-wrapper">
+    {{#if isStep2}}
+    {{#if (gte marksRemaining 0)}}
+    <table class="derived-stat marks-counter">
+      <tr>
+        <th>{{localize "CAMPAIGN_ASSISTANT.labels.marksAvailable"}}</th>
+        <td>{{marksRemaining}}</td>
+      </tr>
+    </table>
+    {{/if}}
+    {{else}}
+    <table class="derived-stat marks-counter">
+      <tr>
+        <th>{{localize "CAMPAIGN_ASSISTANT.labels.marksEarned"}}</th>
+        <td>{{additionalMarks}}</td>
+      </tr>
+    </table>
+    {{/if}}
   </div>
-  {{/if}}
-  {{else}}
-  <div class="marks-available">
-    <strong>{{localize "CAMPAIGN_ASSISTANT.labels.marksEarned"}}: {{additionalMarks}}</strong>
-  </div>
-  {{/if}}
   {{/unless}}
 
   {{!-- STEP 1: Questions --}}
   {{#if isStep1}}
   <div class="step-content">
-    <div class="questions-section">
-      <h3 class="section-heading">{{localize "CAMPAIGN_ASSISTANT.sections.questions"}}</h3>
+    <div class="text-box-editor questions-section">
+      <div class="label-container">
+        <label>{{localize "CAMPAIGN_ASSISTANT.steps.questions"}}</label>
+      </div>
       
-      <div class="questions">
+      <div class="question-answers">
         {{#each questions}}
-        <label class="question">
+        <label class="question-item">
           <input 
             type="checkbox" 
             name="question_{{id}}" 
@@ -82,7 +90,7 @@
         {{#if useWeaknessRule}}
         {{#if hasWeakness}}
         <div class="weakness-question">
-          <label class="section-heading"><strong>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessLabel"}}</strong></label>
+          <label class="weakness-heading"><strong>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessLabel"}}</strong></label>
           <div class="weakness-options">
             <label class="weakness-option">
               <input 
@@ -117,7 +125,7 @@
           </div>
           
           <div class="weakness-display">
-            <strong class="section-heading">{{localize "CAMPAIGN_ASSISTANT.labels.yourWeakness"}}:</strong> <span class="weakness-text">{{{currentWeakness}}}</span>
+            <strong>{{localize "CAMPAIGN_ASSISTANT.labels.yourWeakness"}}:</strong> <span class="weakness-text">{{{currentWeakness}}}</span>
           </div>
         </div>
         {{/if}}
@@ -131,8 +139,11 @@
   {{#if isStep2}}
   <div class="step-content">
     {{#if unmarkedSkills}}
-    <div class="unmarked-skills-section">
-      <h3 class="section-heading">{{localize "CAMPAIGN_ASSISTANT.sections.selectSkills"}}</h3>
+    <div class="text-box-editor skills-section">
+      <div class="label-container">
+        <label>{{localize "CAMPAIGN_ASSISTANT.steps.select"}}</label>
+      </div>
+      
       <div class="skill-list">
         {{#each unmarkedSkills}}
         <div class="skill-item {{#if selected}}selected{{/if}}" 
@@ -162,8 +173,11 @@
   {{#if isStep3}}
   <div class="step-content">
     {{#if hasMarkedSkills}}
-    <div class="marked-skills-section">
-      <h3 class="section-heading">{{localize "CAMPAIGN_ASSISTANT.sections.markedSkills"}}</h3>
+    <div class="text-box-editor marked-skills-section">
+      <div class="label-container">
+        <label>{{localize "CAMPAIGN_ASSISTANT.steps.roll"}}</label>
+      </div>
+      
       <div class="skill-list marked">
         {{#each markedSkills}}
         <div class="skill-item {{#if newlyMarked}}newly-marked{{else}}marked{{/if}}">
@@ -175,14 +189,19 @@
           <i class="fas fa-check"></i>
         </div>
         {{/each}}
+      </div>
     </div>
-  </div>  
-  <div class="rules-reminder">
-    <em>{{localize "CAMPAIGN_ASSISTANT.instructions.advancementRule"}}</em>
+    
+    <div class="rules-reminder">
+      <em>{{localize "CAMPAIGN_ASSISTANT.instructions.advancementRule"}}</em>
+    </div>
+    {{else}}
+    <div class="empty-state">
+      <p><em>{{localize "CAMPAIGN_ASSISTANT.instructions.noMarkedSkills"}}</em></p>
+    </div>
+    {{/if}}
   </div>
   {{/if}}
-</div>
-{{/if}}
 
   {{!-- Navigation Buttons --}}
   <footer class="form-footer">
@@ -194,6 +213,10 @@
     {{/if}}
 
     {{#if isStep2}}
+    <button type="button" data-action="cancel" class="secondary">
+      <i class="fas fa-times"></i>
+      <span>{{localize "CAMPAIGN_ASSISTANT.buttons.cancel"}}</span>
+    </button>
     {{#if hasSelectedSkills}}
     <button type="submit" data-action="complete">
       <i class="fas fa-check"></i>
@@ -208,6 +231,10 @@
     {{/if}}
 
     {{#if isStep3}}
+    <button type="button" data-action="cancel" class="secondary">
+      <i class="fas fa-times"></i>
+      <span>{{localize "CAMPAIGN_ASSISTANT.buttons.cancel"}}</span>
+    </button>
     {{#if hasMarkedSkills}}
     <button type="submit" data-action="rollAdvancement">
       <i class="fas fa-dice-d20"></i>

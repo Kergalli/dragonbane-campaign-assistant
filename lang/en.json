@@ -54,12 +54,6 @@
       "weaknessOvercame": "Acted against your weakness"
     },
 
-    "sections": {
-      "questions": "Advancement Questions",
-      "selectSkills": "Select Skills to Mark for Advancement",
-      "markedSkills": "Skills Ready to Roll for Advancement"
-    },
-
     "steps": {
       "questions": "Questions",
       "select": "Select Skills",
@@ -88,7 +82,8 @@
       "sessionAdvancement": "Session Advancement",
       "markSelected": "Mark Selected Skills",
       "rollAdvancement": "Roll All Advancement",
-      "next": "Next"
+      "next": "Next",
+      "cancel": "Cancel"
     },
 
     "dialog": {
@@ -102,7 +97,7 @@
         "title": "Remove Weakness",
         "content": "You have overcome your weakness! Remove it from your character sheet? You must play a full session without a weakness, then you may choose a new one.",
         "yes": "Remove Weakness",
-        "no": "Keep It"
+        "cancel": "Cancel"
       }
     },
 

@@ -2,7 +2,7 @@
  * Utility functions for Dragonbane Campaign Assistant
  */
 
-import { MODULE_ID, SETTINGS, FLAG_KEYS } from './constants.js';
+import { FLAG_KEYS, MODULE_ID, SETTINGS } from "./constants.js";
 
 export class Utils {
   /**
@@ -53,22 +53,22 @@ export class Utils {
    * Check if actor is a player character
    */
   static isPlayerCharacter(actor) {
-    return actor?.type === 'character' && actor.hasPlayerOwner;
+    return actor?.type === "character" && actor.hasPlayerOwner;
   }
 
   /**
    * Get all skills from actor
    */
   static getSkills(actor) {
-    return actor.items.filter(item => item.type === 'skill');
+    return actor.items.filter((item) => item.type === "skill");
   }
 
   /**
    * Get skills marked for advancement
    */
   static getMarkedSkills(actor) {
-    return actor.items.filter(item => 
-      item.type === 'skill' && !!item.system.advance  // Truthy check
+    return actor.items.filter(
+      (item) => item.type === "skill" && !!item.system.advance // Truthy check
     );
   }
 
@@ -76,10 +76,11 @@ export class Utils {
    * Get unmarked skills (available for marking)
    */
   static getUnmarkedSkills(actor) {
-    return actor.items.filter(item => 
-      item.type === 'skill' && 
-      !item.system.advance &&  // Treats false, null, undefined as unmarked
-      item.system.value < 18   // Can't mark skills at max level
+    return actor.items.filter(
+      (item) =>
+        item.type === "skill" &&
+        !item.system.advance && // Treats false, null, undefined as unmarked
+        item.system.value < 18 // Can't mark skills at max level
     );
   }
 
@@ -105,7 +106,7 @@ export class Utils {
     const session = {
       ...sessionData,
       timestamp: Date.now(),
-      sessionNumber: history.length + 1
+      sessionNumber: history.length + 1,
     };
     history.push(session);
     await this.saveSessionHistory(actor, history);

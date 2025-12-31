@@ -3,63 +3,75 @@
  * Handles the 5 advancement questions and skill marking workflow
  */
 
-import { MODULE_ID, MODULE_NAME, ADVANCEMENT_QUESTIONS, SOCKET_EVENTS } from './constants.js';
-import { Utils } from './utils.js';
+import { MODULE_ID, SOCKET_EVENTS } from "./constants.js";
+import { Utils } from "./utils.js";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
-export class SessionAdvancementDialog extends HandlebarsApplicationMixin(ApplicationV2) {
+export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
+  ApplicationV2
+) {
   constructor(actor, options = {}) {
     super(options);
     this.actor = actor;
+
+    // Set dynamic title with character name
+    this.options.window.title = `Session Advancement: ${actor.name}`;
+
     this.questionAnswers = {
       participated: false,
       explored: false,
       defeated: false,
       overcame: false,
-      weakness: 'none' // 'none', 'gavein', or 'overcame'
+      weakness: "none", // 'none', 'gavein', or 'overcame'
     };
     this.customQuestionAnswers = {}; // Track custom question answers separately
     this.additionalMarks = 0;
     this.selectedSkills = new Set();
     this.currentStep = 1; // Track which step we're on (1, 2, or 3)
-    
+
     // Track which skills were already marked when dialog opened
     this.originalMarkedSkills = new Set(
-      Utils.getMarkedSkills(this.actor).map(s => s.id)
+      Utils.getMarkedSkills(this.actor).map((s) => s.id)
     );
   }
 
   static DEFAULT_OPTIONS = {
-    id: 'session-advancement-dialog',
-    tag: 'form',
+    id: "session-advancement-dialog",
+    tag: "form",
     window: {
-      title: 'Session Advancement',
-      contentClasses: ['dragonbane', 'campaign-assistant', 'session-advancement'],
-      resizable: true
+      title: "Session Advancement",
+      contentClasses: [
+        "dragonbane",
+        "campaign-assistant",
+        "session-advancement",
+      ],
+      resizable: true,
     },
     position: {
       width: 700,
-      height: 755
+      height: 755,
     },
     form: {
       handler: SessionAdvancementDialog.prototype._onFormSubmit,
       submitOnChange: true,
-      closeOnSubmit: false
+      closeOnSubmit: false,
     },
     actions: {
       markSkill: SessionAdvancementDialog.prototype._onMarkSkill,
       rollAdvancement: SessionAdvancementDialog.prototype._onRollAdvancement,
       complete: SessionAdvancementDialog.prototype._onComplete,
-      nextStep: SessionAdvancementDialog.prototype._onNextStep
-    }
+      nextStep: SessionAdvancementDialog.prototype._onNextStep,
+      cancel: SessionAdvancementDialog.prototype._onCancel,
+    },
   };
 
   static PARTS = {
     form: {
-      template: 'modules/dragonbane-campaign-assistant/templates/session-advancement.hbs',
-      scrollable: ['']
-    }
+      template:
+        "modules/dragonbane-campaign-assistant/templates/session-advancement.hbs",
+      scrollable: [""],
+    },
   };
 
   /**
@@ -67,73 +79,75 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    
+
     const markedSkills = Utils.getMarkedSkills(this.actor);
     const unmarkedSkills = Utils.getUnmarkedSkills(this.actor);
 
-
     // Get character's current weakness
-    const currentWeakness = this.actor.system?.weakness || this.actor.system?.details?.weakness || '';
-    
+    const currentWeakness =
+      this.actor.system?.weakness || this.actor.system?.details?.weakness || "";
+
     // Check if weakness rule is enabled
-    const useWeaknessRule = Utils.getSetting('useWeaknessRule');
-    
+    const useWeaknessRule = Utils.getSetting("useWeaknessRule");
+
     // Check which default questions are hidden
-    const hideParticipated = Utils.getSetting('hideParticipated');
-    const hideExplored = Utils.getSetting('hideExplored');
-    const hideDefeated = Utils.getSetting('hideDefeated');
-    const hideOvercame = Utils.getSetting('hideOvercame');
-    
+    const hideParticipated = Utils.getSetting("hideParticipated");
+    const hideExplored = Utils.getSetting("hideExplored");
+    const hideDefeated = Utils.getSetting("hideDefeated");
+    const hideOvercame = Utils.getSetting("hideOvercame");
+
     // Get custom questions
-    const customQuestionsText = Utils.getSetting('customQuestions') || '';
+    const customQuestionsText = Utils.getSetting("customQuestions") || "";
     const customQuestions = customQuestionsText
-      .split(';')
-      .map(q => q.trim())
-      .filter(q => q.length > 0);
+      .split(";")
+      .map((q) => q.trim())
+      .filter((q) => q.length > 0);
 
     // Prepare enabled default questions (filter out hidden ones)
     const defaultQuestionConfigs = [
-      { id: 'participated', hidden: hideParticipated },
-      { id: 'explored', hidden: hideExplored },
-      { id: 'defeated', hidden: hideDefeated },
-      { id: 'overcame', hidden: hideOvercame }
+      { id: "participated", hidden: hideParticipated },
+      { id: "explored", hidden: hideExplored },
+      { id: "defeated", hidden: hideDefeated },
+      { id: "overcame", hidden: hideOvercame },
     ];
-    
+
     const regularQuestions = defaultQuestionConfigs
-      .filter(q => !q.hidden)
-      .map(q => ({
+      .filter((q) => !q.hidden)
+      .map((q) => ({
         id: q.id,
         label: Utils.localize(`CAMPAIGN_ASSISTANT.questions.${q.id}`),
         checked: this.questionAnswers[q.id] || false,
-        isCustom: false
+        isCustom: false,
       }));
-    
+
     // Add custom questions
     const customQuestionList = customQuestions.map((q, index) => ({
       id: `custom_${index}`,
       label: q,
       checked: this.customQuestionAnswers[`custom_${index}`] || false,
-      isCustom: true
+      isCustom: true,
     }));
-    
+
     // Combine all questions
     const allQuestions = [...regularQuestions, ...customQuestionList];
 
     // Count yes answers from default questions (only count non-hidden ones)
-    const regularMarks = defaultQuestionConfigs
-      .filter(q => !q.hidden && this.questionAnswers[q.id])
-      .length;
-    
+    const regularMarks = defaultQuestionConfigs.filter(
+      (q) => !q.hidden && this.questionAnswers[q.id]
+    ).length;
+
     // Count yes answers from custom questions
-    const customMarks = Object.values(this.customQuestionAnswers).filter(Boolean).length;
-    
+    const customMarks = Object.values(this.customQuestionAnswers).filter(
+      Boolean
+    ).length;
+
     // Add weakness marks (0, 1, or 2) - only if rule is enabled
     let weaknessMarks = 0;
     if (useWeaknessRule) {
-      if (this.questionAnswers.weakness === 'gavein') weaknessMarks = 1;
-      if (this.questionAnswers.weakness === 'overcame') weaknessMarks = 2;
+      if (this.questionAnswers.weakness === "gavein") weaknessMarks = 1;
+      if (this.questionAnswers.weakness === "overcame") weaknessMarks = 2;
     }
-    
+
     this.additionalMarks = regularMarks + customMarks + weaknessMarks;
 
     return {
@@ -148,28 +162,28 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
       currentWeakness: currentWeakness,
       hasWeakness: !!currentWeakness,
       weaknessAnswer: this.questionAnswers.weakness,
-      weaknessNoneChecked: this.questionAnswers.weakness === 'none',
-      weaknessGaveInChecked: this.questionAnswers.weakness === 'gavein',
-      weaknessOvercameChecked: this.questionAnswers.weakness === 'overcame',
-      markedSkills: markedSkills.map(s => ({
+      weaknessNoneChecked: this.questionAnswers.weakness === "none",
+      weaknessGaveInChecked: this.questionAnswers.weakness === "gavein",
+      weaknessOvercameChecked: this.questionAnswers.weakness === "overcame",
+      markedSkills: markedSkills.map((s) => ({
         id: s.id,
         name: s.name,
         level: s.system.value,
         taught: !!s.system.taught,
-        newlyMarked: !this.originalMarkedSkills.has(s.id)
+        newlyMarked: !this.originalMarkedSkills.has(s.id),
       })),
-      unmarkedSkills: unmarkedSkills.map(s => ({
+      unmarkedSkills: unmarkedSkills.map((s) => ({
         id: s.id,
         name: s.name,
         level: s.system.value,
         selected: this.selectedSkills.has(s.id),
-        taught: !!s.system.taught
+        taught: !!s.system.taught,
       })),
       additionalMarks: this.additionalMarks,
       marksRemaining: this.additionalMarks - this.selectedSkills.size,
       canAddMore: this.selectedSkills.size < this.additionalMarks,
       hasSelectedSkills: this.selectedSkills.size > 0,
-      hasMarkedSkills: markedSkills.length > 0
+      hasMarkedSkills: markedSkills.length > 0,
     };
   }
 
@@ -178,24 +192,25 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    */
   async _onFormSubmit(event, form, formData) {
     // Update default question answers from form data
-    ['participated', 'explored', 'defeated', 'overcame'].forEach(q => {
+    ["participated", "explored", "defeated", "overcame"].forEach((q) => {
       this.questionAnswers[q] = formData.object[`question_${q}`] || false;
     });
-    
+
     // Handle custom questions
-    const customQuestionsText = Utils.getSetting('customQuestions') || '';
+    const customQuestionsText = Utils.getSetting("customQuestions") || "";
     const customQuestions = customQuestionsText
-      .split(';')
-      .map(q => q.trim())
-      .filter(q => q.length > 0);
-    
+      .split(";")
+      .map((q) => q.trim())
+      .filter((q) => q.length > 0);
+
     customQuestions.forEach((q, index) => {
       const customId = `custom_${index}`;
-      this.customQuestionAnswers[customId] = formData.object[`question_${customId}`] || false;
+      this.customQuestionAnswers[customId] =
+        formData.object[`question_${customId}`] || false;
     });
-    
+
     // Handle weakness radio buttons
-    this.questionAnswers.weakness = formData.object.question_weakness || 'none';
+    this.questionAnswers.weakness = formData.object.question_weakness || "none";
 
     // Re-render to update available marks
     await this.render();
@@ -212,7 +227,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
     if (!skill) return;
 
     // Save current scroll position before re-render
-    const skillList = this.element?.querySelector('.skill-list');
+    const skillList = this.element?.querySelector(".skill-list");
     const scrollTop = skillList ? skillList.scrollTop : 0;
 
     // Toggle selection
@@ -221,7 +236,9 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
     } else {
       // Check if we can add more
       if (this.selectedSkills.size >= this.additionalMarks) {
-        ui.notifications.warn(Utils.localize('CAMPAIGN_ASSISTANT.warnings.noMoreMarks'));
+        ui.notifications.warn(
+          Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMoreMarks")
+        );
         return;
       }
       this.selectedSkills.add(skillId);
@@ -229,7 +246,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
 
     // Re-render
     await this.render();
-    
+
     // Restore scroll position after render
     await this.#restoreScrollPosition(scrollTop);
   }
@@ -239,9 +256,9 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    */
   async #restoreScrollPosition(scrollTop) {
     // Wait for next frame to ensure DOM is updated
-    await new Promise(resolve => requestAnimationFrame(resolve));
-    
-    const skillList = this.element?.querySelector('.skill-list');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    const skillList = this.element?.querySelector(".skill-list");
     if (skillList && scrollTop > 0) {
       skillList.scrollTop = scrollTop;
     }
@@ -252,58 +269,64 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    */
   async _onRollAdvancement(event, target) {
     event?.preventDefault?.(); // Prevent form submission
-    
+
     const markedSkills = Utils.getMarkedSkills(this.actor);
-    
+
     if (markedSkills.length === 0) {
-      ui.notifications.warn(Utils.localize('CAMPAIGN_ASSISTANT.warnings.noMarkedSkills'));
+      ui.notifications.warn(
+        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMarkedSkills")
+      );
       return;
     }
 
     // Confirm
     const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: Utils.localize('CAMPAIGN_ASSISTANT.dialog.confirmRoll.title') },
-      content: Utils.format('CAMPAIGN_ASSISTANT.dialog.confirmRoll.content', {
-        count: markedSkills.length
+      window: {
+        title: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmRoll.title"),
+      },
+      content: Utils.format("CAMPAIGN_ASSISTANT.dialog.confirmRoll.content", {
+        count: markedSkills.length,
       }),
-      yes: { label: Utils.localize('CAMPAIGN_ASSISTANT.dialog.confirmRoll.yes') },
-      no: { label: Utils.localize('CAMPAIGN_ASSISTANT.dialog.confirmRoll.no') }
+      yes: {
+        label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmRoll.yes"),
+      },
+      no: { label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmRoll.no") },
     });
 
     if (!confirmed) return;
 
     // Roll advancement for each marked skill
     const results = [];
-    
+
     for (const skill of markedSkills) {
-      const roll = await new Roll('1d20').evaluate();
+      const roll = await new Roll("1d20").evaluate();
       const success = roll.total > skill.system.value;
-      
+
       // Calculate new level (capped at 18)
       const currentLevel = skill.system.value;
       const newLevel = success ? Math.min(currentLevel + 1, 18) : currentLevel;
       const reachedMaximum = success && newLevel === 18 && currentLevel < 18;
-      
+
       if (success) {
-        await skill.update({ 
-          'system.value': newLevel,
-          'system.advance': false,
-          'system.taught': false
+        await skill.update({
+          "system.value": newLevel,
+          "system.advance": false,
+          "system.taught": false,
         });
-        
+
         // Special notification for reaching maximum
         if (reachedMaximum) {
           ui.notifications.info(
-            Utils.format('CAMPAIGN_ASSISTANT.notifications.skillMaxed', {
+            Utils.format("CAMPAIGN_ASSISTANT.notifications.skillMaxed", {
               skill: skill.name,
-              actor: this.actor.name
+              actor: this.actor.name,
             })
           );
         }
       } else {
-        await skill.update({ 
-          'system.advance': false,
-          'system.taught': false
+        await skill.update({
+          "system.advance": false,
+          "system.taught": false,
         });
       }
 
@@ -313,20 +336,20 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
         newLevel: newLevel,
         roll: roll.total,
         success,
-        reachedMaximum
+        reachedMaximum,
       });
 
       // Create chat message for the roll
       await roll.toMessage({
         user: game.user.id,
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: success 
-          ? Utils.format('DoD.skill.advancementSuccess', {
+        flavor: success
+          ? Utils.format("DoD.skill.advancementSuccess", {
               skill: skill.name,
               old: currentLevel,
-              new: newLevel
+              new: newLevel,
             })
-          : Utils.format('DoD.skill.advancementFail', { skill: skill.name })
+          : Utils.format("DoD.skill.advancementFail", { skill: skill.name }),
       });
     }
 
@@ -335,7 +358,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
 
     // Show summary
     await this._showSummary(results);
-    
+
     // Record to journal via socket (GM will handle it)
     await this._recordToJournal(results);
 
@@ -348,9 +371,11 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    */
   async _onComplete(event, target) {
     event?.preventDefault?.(); // Prevent form submission
-    
+
     if (this.selectedSkills.size === 0) {
-      ui.notifications.warn(Utils.localize('CAMPAIGN_ASSISTANT.warnings.noSkillsSelected'));
+      ui.notifications.warn(
+        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noSkillsSelected")
+      );
       return;
     }
 
@@ -359,23 +384,22 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
     for (const skillId of this.selectedSkills) {
       const skill = this.actor.items.get(skillId);
       if (skill && !skill.system.advance) {
-        updates.push(skill.update({ 'system.advance': true }));
+        updates.push(skill.update({ "system.advance": true }));
       }
     }
 
     // Wait for all updates to finish
     await Promise.all(updates);
-    
-    // Give a small delay for Foundry to propagate the updates
-    await new Promise(resolve => setTimeout(resolve, 100));
 
+    // Give a small delay for Foundry to propagate the updates
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     // Clear selections since they're now marked
     this.selectedSkills.clear();
 
     // Move to step 3
     this.currentStep = 3;
-    
+
     // Re-render to show updated marked skills
     await this.render();
   }
@@ -385,29 +409,54 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    */
   async _onNextStep(event, target) {
     event?.preventDefault?.(); // Prevent form submission
-    
+
     // If leaving step 1 and they overcame their weakness, handle removal (only if rule is enabled)
-    const useWeaknessRule = Utils.getSetting('useWeaknessRule');
-    if (useWeaknessRule && this.currentStep === 1 && this.questionAnswers.weakness === 'overcame') {
+    const useWeaknessRule = Utils.getSetting("useWeaknessRule");
+    if (
+      useWeaknessRule &&
+      this.currentStep === 1 &&
+      this.questionAnswers.weakness === "overcame"
+    ) {
       const confirmed = await foundry.applications.api.DialogV2.confirm({
-        window: { title: Utils.localize('CAMPAIGN_ASSISTANT.dialog.removeWeakness.title') },
-        content: Utils.localize('CAMPAIGN_ASSISTANT.dialog.removeWeakness.content'),
-        yes: { label: Utils.localize('CAMPAIGN_ASSISTANT.dialog.removeWeakness.yes') },
-        no: { label: Utils.localize('CAMPAIGN_ASSISTANT.dialog.removeWeakness.no') }
+        window: {
+          title: Utils.localize(
+            "CAMPAIGN_ASSISTANT.dialog.removeWeakness.title"
+          ),
+        },
+        content: Utils.localize(
+          "CAMPAIGN_ASSISTANT.dialog.removeWeakness.content"
+        ),
+        yes: {
+          label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.removeWeakness.yes"),
+        },
+        no: {
+          label: Utils.localize(
+            "CAMPAIGN_ASSISTANT.dialog.removeWeakness.cancel"
+          ),
+        },
       });
 
       if (confirmed) {
+        // User clicked "Remove Weakness" - remove it and proceed
         // Try to remove weakness - try both possible locations
         if (this.actor.system.weakness !== undefined) {
-          await this.actor.update({ 'system.weakness': '' });
+          await this.actor.update({ "system.weakness": "" });
         } else if (this.actor.system.details?.weakness !== undefined) {
-          await this.actor.update({ 'system.details.weakness': '' });
+          await this.actor.update({ "system.details.weakness": "" });
         }
-        
-        ui.notifications.info(Utils.localize('CAMPAIGN_ASSISTANT.notifications.weaknessRemoved'));
+
+        ui.notifications.info(
+          Utils.localize("CAMPAIGN_ASSISTANT.notifications.weaknessRemoved")
+        );
+      } else {
+        // User clicked "Cancel" - reset weakness to 'none' and stay on step 1
+        this.questionAnswers.weakness = "none";
+        await this.render();
+        return; // Don't proceed to next step
       }
     }
 
+    // Proceed to next step
     if (this.currentStep < 3) {
       this.currentStep++;
       await this.render();
@@ -418,18 +467,20 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    * Save session data to actor history
    */
   async _saveSessionData(results) {
-    if (!Utils.getSetting('trackSessionHistory')) return;
+    if (!Utils.getSetting("trackSessionHistory")) return;
 
     const sessionData = {
       questions: this.questionAnswers,
       customQuestions: this.customQuestionAnswers,
       additionalMarks: this.additionalMarks,
-      skillsAdvanced: results.filter(r => r.success).map(r => ({
-        skill: r.skill,
-        oldLevel: r.oldLevel,
-        newLevel: r.newLevel
-      })),
-      date: new Date().toISOString()
+      skillsAdvanced: results
+        .filter((r) => r.success)
+        .map((r) => ({
+          skill: r.skill,
+          oldLevel: r.oldLevel,
+          newLevel: r.newLevel,
+        })),
+      date: new Date().toISOString(),
     };
 
     await Utils.addSessionToHistory(this.actor, sessionData);
@@ -439,37 +490,50 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
    * Show session summary in chat
    */
   async _showSummary(results) {
-    const successCount = results.filter(r => r.success).length;
-    const heroicAbilitiesCount = results.filter(r => r.reachedMaximum).length;
-    
-    const successList = results
-      .filter(r => r.success)
-      .map(r => {
-        const maxLabel = r.reachedMaximum 
-          ? ` <strong>${Utils.localize('CAMPAIGN_ASSISTANT.chat.sessionSummary.maxSkillLevel')}</strong>`
-          : '';
-        return `${r.skill} (${r.oldLevel} → ${r.newLevel})${maxLabel}`;
-      })
-      .join('<br>');
+    const successCount = results.filter((r) => r.success).length;
+    const heroicAbilitiesCount = results.filter((r) => r.reachedMaximum).length;
 
-    const heroicAbilitiesLine = heroicAbilitiesCount > 0
-      ? `<p><strong>${Utils.format('CAMPAIGN_ASSISTANT.chat.sessionSummary.heroicAbilitiesGained', { count: heroicAbilitiesCount })}</strong></p>`
-      : '';
+    const successList = results
+      .filter((r) => r.success)
+      .map((r) => {
+        const maxLabel = r.reachedMaximum
+          ? ` ${Utils.localize(
+              "CAMPAIGN_ASSISTANT.chat.sessionSummary.maxSkillLevel"
+            )}`
+          : "";
+        return `<li>${r.skill} (${r.oldLevel} → ${r.newLevel})${maxLabel}</li>`;
+      })
+      .join("");
+
+    const heroicAbilitiesLine =
+      heroicAbilitiesCount > 0
+        ? `<p>${Utils.format(
+            "CAMPAIGN_ASSISTANT.chat.sessionSummary.heroicAbilitiesGained",
+            { count: heroicAbilitiesCount }
+          )}</p>`
+        : "";
 
     const content = `
       <div class="dragonbane campaign-assistant session-summary">
-        <h3>${Utils.format('CAMPAIGN_ASSISTANT.chat.sessionSummary.title', { actor: this.actor.name })}</h3>
-        <p><strong>${Utils.format('CAMPAIGN_ASSISTANT.chat.sessionSummary.marksUsed', { count: results.length })}</strong></p>
-        <p><strong>${Utils.format('CAMPAIGN_ASSISTANT.chat.sessionSummary.skillsAdvanced', { count: successCount })}</strong></p>
+        <h3>${Utils.format("CAMPAIGN_ASSISTANT.chat.sessionSummary.title", {
+          actor: this.actor.name,
+        })}</h3>
+        <p>${Utils.format("CAMPAIGN_ASSISTANT.chat.sessionSummary.marksUsed", {
+          count: results.length,
+        })}</p>
+        <p>${Utils.format(
+          "CAMPAIGN_ASSISTANT.chat.sessionSummary.skillsAdvanced",
+          { count: successCount }
+        )}</p>
         ${heroicAbilitiesLine}
-        ${successCount > 0 ? `<p>${successList}</p>` : ''}
+        ${successCount > 0 ? `<ul>${successList}</ul>` : ""}
       </div>
     `;
 
     await ChatMessage.create({
       user: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content
+      content,
     });
   }
 
@@ -479,10 +543,38 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(Applica
   async _recordToJournal(results) {
     // Access socket from game object
     const socket = game.modules.get(MODULE_ID)?.socket;
-    
+
     if (socket) {
       // Send to GM via socket
-      await socket.executeForEveryone(SOCKET_EVENTS.RECORD_ADVANCEMENT, this.actor.id, this.actor.name, results);
+      await socket.executeForEveryone(
+        SOCKET_EVENTS.RECORD_ADVANCEMENT,
+        this.actor.id,
+        this.actor.name,
+        results
+      );
     }
+  }
+
+  /**
+   * Handle cancel button
+   */
+  async _onCancel(event, target) {
+    event?.preventDefault?.();
+
+    // Step 3: Unmark any skills that were marked in Step 2
+    if (this.currentStep === 3) {
+      const currentMarkedSkills = Utils.getMarkedSkills(this.actor);
+
+      // Unmark skills that weren't originally marked
+      for (const skill of currentMarkedSkills) {
+        if (!this.originalMarkedSkills.has(skill.id)) {
+          await skill.update({ "system.advance": false });
+        }
+      }
+    }
+
+    // Step 2: Just close (nothing to undo)
+    // Step 3: Close after unmarking
+    await this.close();
   }
 }
