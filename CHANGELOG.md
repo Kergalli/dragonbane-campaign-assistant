@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - **Custom Questions** - Add house-rule advancement questions (semicolon-separated)
 - **Optional Weakness Rule** - Enable/disable the weakness advancement question (disabled by default)
 - **Level 18 Cap** - Skills automatically cap at maximum level with special celebration notifications
-- **Visual Skill Differentiation** - Blue for pre-marked skills, teal for newly selected skills
+- **Visual Skill Differentiation** - Teal-colored skills track new skills that were selected during advancement
 - **Session History API** - Track advancement history in actor flags for API access
 - **Cross-Client Support** - Seamless socket integration for multi-user sessions
 - **Localization** - Full English and Swedish translations
