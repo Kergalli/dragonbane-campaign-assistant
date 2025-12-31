@@ -18,7 +18,7 @@
         "hint": "Aktivera svaghetsfrågan i sessionsutveckling (valfri regel från regelboken)"
       },
       "hideParticipated": {
-        "name": "Dölj 'Deltog du i spelsessionen?'",
+        "name": "Dölj 'Var du med på spelmötet?'",
         "hint": "Dölj denna utvecklingsfråga från dialogen"
       },
       "hideExplored": {
@@ -26,7 +26,7 @@
         "hint": "Dölj denna utvecklingsfråga från dialogen"
       },
       "hideDefeated": {
-        "name": "Dölj 'Besegrade du en eller flera farliga motståndare?'",
+        "name": "Dölj 'Besegrade du en eller flera farliga fiender?'",
         "hint": "Dölj denna utvecklingsfråga från dialogen"
       },
       "hideOvercame": {
@@ -44,14 +44,14 @@
     },
 
     "questions": {
-      "participated": "Deltog du i spelsessionen?",
+      "participated": "Var du med på spelmötet?",
       "explored": "Utforskade du en ny plats?",
-      "defeated": "Besegrade du en eller flera farliga motståndare?",
+      "defeated": "Besegrade du en eller flera farliga fiender?",
       "overcame": "Övervann du ett hinder utan att använda våld?",
-      "weaknessLabel": "Hur engagerade du dig med din svaghet?",
+      "weaknessLabel": "Svaghet",
       "weaknessNone": "Engagerade inte med svaghet",
       "weaknessGaveIn": "Gav efter för din svaghet",
-      "weaknessOvercame": "Handlade mot din svaghet"
+      "weaknessOvercame": "Agerade emot din svaghet"
     },
 
     "steps": {
@@ -64,8 +64,8 @@
       "questions": "Svara på frågorna nedan. Varje 'ja' ger dig en utvecklingsmarkering att använda.",
       "selectMore": "Klicka på färdigheter för att välja dem för markering. Du har markeringar kvar.",
       "readyToMark": "Klicka på 'Markera Valda Färdigheter' när du är redo att fortsätta.",
-      "readyToRoll": "Klicka på 'Slå All Utveckling' för att slå för alla markerade färdigheter.",
-      "advancementRule": "Om slaget överträffar din nuvarande färdighetsnivå ökas färdigheten med ett, upp till ett maximum av 18.",
+      "readyToRoll": "Klicka på 'Slå Alla Förbättringsslag' för att slå för alla markerade färdigheter.",
+      "advancementRule": "Om du slår högre än ditt nuvarande FV ökar färdighetsvärdet ett steg, upp till maximala 18.",
       "noMarksToUse": "Inga utvecklingsmarkeringar tillgängliga. Klicka på 'Nästa' för att fortsätta till slagning.",
       "noSkills": "Inga färdigheter tillgängliga att markera. Svara på frågorna först för att tjäna markeringar, eller återvänd till ditt karaktärsark för att rensa några befintliga markeringar.",
       "noMarkedSkills": "Inga färdigheter är för närvarande markerade för utveckling. Använd 'Välj Färdigheter'-steget för att markera några, eller markera dem på ditt karaktärsark."
@@ -81,21 +81,21 @@
     "buttons": {
       "sessionAdvancement": "Sessionsutveckling",
       "markSelected": "Markera Valda Färdigheter",
-      "rollAdvancement": "Slå All Utveckling",
+      "rollAdvancement": "Slå Alla Förbättringsslag",
       "next": "Nästa",
       "cancel": "Avbryt"
     },
 
     "dialog": {
       "confirmRoll": {
-        "title": "Bekräfta utvecklingskast",
-        "content": "Slå utvecklingskast för {count} markerade färdigheter?",
+        "title": "Bekräfta förbättringsslag",
+        "content": "Slå förbättringsslag för {count} markerade färdigheter?",
         "yes": "Slå alla",
         "no": "Avbryt"
       },
       "removeWeakness": {
         "title": "Ta bort svaghet",
-        "content": "Du har övervunnit din svaghet! Ta bort den från ditt karaktärsblad? Du måste spela en hel session utan svaghet innan du kan välja en ny.",
+        "content": "Du har övervunnit din svaghet! Ta bort den från ditt karaktärsblad? Du måste spela minst ett helt spelmöte utan svaghet innan du kan välja en ny.",
         "yes": "Ta bort svaghet",
         "cancel": "Avbryt"
       }
@@ -107,12 +107,12 @@
         "marksUsed": "Utvecklingsmarkeringar använda: {count}",
         "skillsAdvanced": "Färdigheter utvecklade: {count}",
         "heroicAbilitiesGained": "Heroiska förmågor erhållna: {count}",
-        "maxSkillLevel": "Maximal Färdighetsnivå"
+        "maxSkillLevel": "Maximal färdighetsnivå"
       }
     },
 
     "notifications": {
-      "weaknessRemoved": "Svaghet borttagen från karaktärsblad. Kom ihåg att spela en hel session innan du väljer en ny!",
+      "weaknessRemoved": "Svaghet borttagen från karaktärsblad. Kom ihåg att spela minst ett helt spelmöte innan du väljer en ny!",
       "skillMaxed": "{skill} har nått maximala nivån 18 för {actor}! 🎉"
     },
 
