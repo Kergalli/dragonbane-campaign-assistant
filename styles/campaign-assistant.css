@@ -422,11 +422,23 @@
   margin-right: 0.5rem;
 }
 
+/* Default icon color (fallback) */
 .session-advancement .skill-item i {
-  color: #228b22;
+  color: #00604d;
 }
 
+/* Marked skills (already on character sheet) - dice icon in green */
 .session-advancement .skill-item.marked i {
+  color: #00604d;
+}
+
+/* Newly marked skills (selected in Step 2) - checkmark in teal */
+.session-advancement .skill-item.newly-marked .fa-check-circle {
+  color: #00604d;
+}
+
+/* Step 2 selected skills - checkmark in teal (existing rule) */
+.session-advancement .skill-item.selected .fa-check-circle {
   color: #00604d;
 }
 

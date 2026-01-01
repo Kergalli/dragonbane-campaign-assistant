@@ -186,7 +186,11 @@
             {{#if taught}}<i class="fas fa-graduation-cap" title="Trained with teacher"></i>{{/if}}
           </span>
           <span class="skill-level">{{localize "CAMPAIGN_ASSISTANT.labels.level"}}: {{level}}</span>
-          <i class="fas fa-check"></i>
+          {{#if newlyMarked}}
+          <i class="fas fa-check-circle"></i>
+          {{else}}
+          <i class="fas fa-dice-d20"></i>
+          {{/if}}
         </div>
         {{/each}}
       </div>
