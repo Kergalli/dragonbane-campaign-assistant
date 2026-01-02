@@ -8,6 +8,15 @@
   font-family: var(--dod-font-primary);
 }
 
+.system-dragonbane
+  form
+  .window-content.dragonbane.campaign-assistant.session-advancement {
+  background: url("../../../systems/dragonbane/art/ui/item-sheet-bg.webp")
+    repeat;
+  background-position: top center;
+  padding: 0.35rem;
+}
+
 .session-advancement-content {
   padding: 0.35rem;
 }
