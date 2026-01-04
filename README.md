@@ -1,6 +1,6 @@
 # Dragonbane Campaign Assistant
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![Foundry Version](https://img.shields.io/badge/foundry-v13-green)
 ![System](https://img.shields.io/badge/system-dragonbane-orange)
 
@@ -31,11 +31,28 @@ Implements the complete session-end advancement system from page 29 of the Drago
 - **Smart skill selection** - Choose which unmarked skills to mark for advancement
 - **Weakness tracking** - Optional rule (disabled by default) with automatic removal dialog when overcome
 
-**Bulk Advancement Rolling:**
+**Flexible Advancement Rolling:**
 
-- **Roll all marked skills at once** - No more clicking through each skill individually
+Choose your preferred rolling style with the **Advancement Roll Mode** setting:
+
+- **Bulk Rolling** (default) - Roll all marked skills at once with one consolidated summary
+  - Fast and efficient for large skill lists
+  - Single "Roll All Advancement" button
+  - Consolidated session summary in chat
+- **Individual Rolling** - Click each skill to roll them one at a time
+  - Perfect for dramatic moments or important skills
+  - D20 icon shows skills ready to roll
+  - Click any skill to roll it immediately
+  - Skills gray out after rolling with checkmark indicator
+  - "Complete Session" button appears when all skills are rolled
+  - Full session summary and journal recording after completion
+
+Both modes include:
+
 - **Level 18 cap enforcement** - Skills automatically cap at maximum level
 - **Heroic ability celebration** - Special notifications when skills reach level 18
+- **Automatic chat messages** - Individual skill roll results posted to chat
+- **Full journal recording** - Complete session history with all advancement details
 
 **Automatic GM Journals:**
 
@@ -55,6 +72,7 @@ Implements the complete session-end advancement system from page 29 of the Drago
 - **Color-coded skills** - Teal-colored skills track new skills that were selected during advancement
 - **Graduation cap icons** - Visual indicator for skills trained with a teacher
 - **Dynamic counters** - Real-time display of remaining advancement marks
+- **Dark mode support** - Proper button styling for both light and dark Foundry VTT themes
 
 ---
 
@@ -65,6 +83,7 @@ Implements the complete session-end advancement system from page 29 of the Drago
 ### **Session Advancement**
 
 - **Add Character Sheet Buttons** - Adds "Session" button (up arrow in character sheet header) for player-initiated advancement
+- **Advancement Roll Mode** - Choose between Bulk Rolling (all at once) or Individual Rolling (click each skill)
 - **Track Session History** - Saves detailed advancement history in actor flags for API access
 - **Use Weakness Optional Rule** - Enable the weakness question in session advancement (optional rule from rulebook)
 - **Hide Default Questions** - Four checkboxes to hide any of the 4 default advancement questions
@@ -85,10 +104,12 @@ Implements the complete session-end advancement system from page 29 of the Drago
 3. Select which unmarked skills to mark for advancement
 4. Click "Mark Selected Skills" to prepare skills
 5. Review all marked skills (from questions + auto-marks from Dragon/Demon rolls)
-6. Click "Roll All Advancement" to roll everything at once
-7. View session summary in chat
+6. **Choose your rolling method:**
+   - **Bulk Mode**: Click "Roll All Advancement" → all skills roll at once → view summary
+   - **Individual Mode**: Click each skill to roll → "Complete Session" when done → view summary
+7. Session summary posted to chat, journal updated automatically
 
-### **Example: Session Advancement**
+### **Example: Bulk Rolling Mode (Default)**
 
 **Scenario:** Player answers 3 "yes" questions and already has 2 skills marked from Dragon rolls during play.
 
@@ -103,6 +124,27 @@ Implements the complete session-end advancement system from page 29 of the Drago
    - Successful rolls increase skill levels
    - Any skill reaching 18 triggers special notification
 5. **Summary:** Chat shows session results with date, marks used, skills advanced
+
+### **Example: Individual Rolling Mode**
+
+**Scenario:** Same as above, but using individual rolling for important skills.
+
+1. **Steps 1-2:** Same as bulk mode - answer questions, select 3 skills to mark
+2. **Step 3 - Ready to Roll:** Shows all 5 marked skills with D20 icons
+3. **Individual Rolling:**
+   - Clicks "Acrobatics" → rolls 14 → skill increases 12 → 13
+   - Clicks "Sneaking" → rolls 8 → skill increases 16 → 17
+   - Clicks "Swords" → rolls 19 → no increase (failed)
+   - Continues through remaining skills
+   - Each roll posts to chat immediately
+4. **Completion:** All skills show checkmarks, clicks "Complete Session"
+   - Confirms completion
+   - Journal entry created with full session details
+   - Chat summary shows final results
+5. **Cancel Safety:** Can click Cancel at any time before Complete Session
+   - Confirms before reverting
+   - All individual rolls are reverted
+   - Marks from Step 2 are removed
 
 ---
 
@@ -120,20 +162,28 @@ Implements the complete session-end advancement system from page 29 of the Drago
 
 - **ApplicationV2**: Module uses Foundry v13's modern application framework
 - **Native Integration**: Works seamlessly with Dragonbane system's built-in advancement mechanics
+- **Dark Mode**: Fully compatible with Foundry VTT's dark mode interface
 
 ---
 
-## 🌍 **Localization & Support**
+## 🌍 **Credits & Support**
 
-- **Languages**: Full support for English and Swedish using official Dragonbane translation keys
-- **Support**: [GitHub Issues](https://github.com/Kergalli/dragonbane-campaign-assistant/issues)
+### **Community & Support**
+
+- **Issues**: [GitHub Issues](https://github.com/Kergalli/dragonbane-campaign-assistant/issues)
+- **Documentation**: [Complete Changelog](CHANGELOG.md)
+- **Community**: Dragonbane Community Discord
+
+### **Community Contributors**
+
+- **LuckyFrico** - Italian language localization
 
 ---
 
 ## ⚖️ **License & Disclaimer**
 
-MIT License. 
+MIT License.
 
-This VTT module is not affiliated with, sponsored, or endorsed by Fria Ligan AB. This Supplement was created under Fria Ligan AB’s [Dragonbane Third Party Supplement License](https://freeleaguepublishing.com/wp-content/uploads/2023/11/Dragonbane-License-Agreement.pdf).
+This VTT module is not affiliated with, sponsored, or endorsed by Fria Ligan AB. This Supplement was created under Fria Ligan AB's [Dragonbane Third Party Supplement License](https://freeleaguepublishing.com/wp-content/uploads/2023/11/Dragonbane-License-Agreement.pdf).
 
 ![A Supplement For Dragonbane](https://raw.githubusercontent.com/Kergalli/dragonbane_macros/refs/heads/main/dragonbane-license-logo-red.png)

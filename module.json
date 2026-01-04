@@ -45,6 +45,11 @@
       "lang": "sv",
       "name": "Svenska",
       "path": "lang/sv.json"
+    },
+    {
+      "lang": "it",
+      "name": "Italiano",
+      "path": "lang/it.json"
     }
   ],
   "url": "https://github.com/Kergalli/dragonbane-campaign-assistant",

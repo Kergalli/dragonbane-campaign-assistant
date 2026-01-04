@@ -1,0 +1,150 @@
+{
+  "CAMPAIGN_ASSISTANT": {
+    "settings": {
+      "enabled": {
+        "name": "Abilita Campaign Assistant",
+        "hint": "Abilita o disabilita il modulo Campaign Assistant"
+      },
+      "addActorButtons": {
+        "name": "Aggiungi Pulsanti alla Scheda del Personaggio",
+        "hint": "Aggiunge il pulsante di Avanzamento di Sessione alle schede dei personaggi (richiede ricarica)"
+      },
+      "trackSessionHistory": {
+        "name": "Traccia Cronologia delle Sessioni",
+        "hint": "Salva la cronologia dell'avanzamento di sessione nei flag dell'attore"
+      },
+      "useWeaknessRule": {
+        "name": "Usa la Regola Opzionale della Debolezza",
+        "hint": "Abilita la domanda sulla debolezza nell'avanzamento di sessione (regola opzionale dal manuale)"
+      },
+      "hideParticipated": {
+        "name": "Nascondi 'Hai contribuito alla sessione di gioco?'",
+        "hint": "Nasconde questa domanda di avanzamento dalla finestra di dialogo"
+      },
+      "hideExplored": {
+        "name": "Nascondi 'Hai esplorato un nuovo luogo?'",
+        "hint": "Nasconde questa domanda di avanzamento dalla finestra di dialogo"
+      },
+      "hideDefeated": {
+        "name": "Nascondi 'Hai sconfitto uno o più nemici pericolosi?'",
+        "hint": "Nasconde questa domanda di avanzamento dalla finestra di dialogo"
+      },
+      "hideOvercame": {
+        "name": "Nascondi 'Hai superato un ostacolo senza usare la forza?'",
+        "hint": "Nasconde questa domanda di avanzamento dalla finestra di dialogo"
+      },
+      "customQuestions": {
+        "name": "Domande di Avanzamento Personalizzate",
+        "hint": "Aggiungi domande di avanzamento personalizzate separate da punto e virgola. Ogni risposta 'sì' concede 1 marchio. Esempio: Hai interpretato bene il tuo personaggio?; Hai aiutato il gruppo a riuscire?; Hai contribuito alla storia?"
+      },
+      "advancementRollMode": {
+        "name": "Modalità di Tiro per Avanzamento",
+        "hint": "Scegli come gestire i tiri di avanzamento delle abilità nel Passo 3. In blocco: Tira tutte le abilità insieme con un unico riepilogo. Individuale: Clicca ogni abilità per tirarla una alla volta.",
+        "bulk": "Tiri in Blocco (Tira Tutto Insieme)",
+        "individual": "Tiri Individuali (Clicca Ogni Abilità)"
+      },
+      "debugMode": {
+        "name": "Modalità Debug",
+        "hint": "Abilita un log dettagliato nella console per la risoluzione dei problemi"
+      }
+    },
+
+    "questions": {
+      "participated": "Hai contribuito alla sessione di gioco?",
+      "explored": "Hai esplorato un nuovo luogo?",
+      "defeated": "Hai sconfitto uno o più nemici pericolosi?",
+      "overcame": "Hai superato un ostacolo senza usare la forza?",
+      "weaknessQuestion": "Come ti sei rapportato alla tua debolezza?",
+      "weaknessNone": "Non hai ceduto né interagito con la debolezza",
+      "weaknessGaveIn": "Hai ceduto alla tua debolezza",
+      "weaknessOvercame": "Hai agito contro la tua debolezza"
+    },
+
+    "steps": {
+      "questions": "Domande",
+      "select": "Seleziona Abilità",
+      "roll": "Pronto per i Tiri"
+    },
+
+    "instructions": {
+      "questions": "Rispondi alle domande qui sotto. Ogni 'sì' ti concede un marchio di avanzamento da usare.",
+      "selectMore": "Clicca sulle abilità per selezionarle e marchiarle. Hai ancora marchi disponibili.",
+      "readyToMark": "Clicca 'Applica Marchi alle Abilità Selezionate' quando sei pronto a procedere.",
+      "readyToRoll": "Clicca 'Tira Tutti i Tiri di Avanzamento' per tirare per tutte le abilità marchiate.",
+      "readyToRollIndividual": "Clicca sulle abilità per tirarle individualmente. Quando tutte sono state tirate, clicca Completa Sessione per finire.",
+      "allSkillsRolled": "Tutte le abilità tirate! Clicca Completa Sessione per finire e registrare i risultati.",
+      "advancementRule": "Se il tiro supera il tuo attuale livello di abilità, l'abilità aumenta di uno, fino a un massimo di 18.",
+      "noMarksToUse": "Nessun marchio di avanzamento disponibile. Clicca 'Avanti' per procedere ai tiri.",
+      "noSkills": "Nessuna abilità disponibile da marcare. Rispondi prima alle domande per ottenere marchi, oppure torna alla scheda del personaggio per cancellare alcuni marchi esistenti.",
+      "noMarkedSkills": "Nessuna abilità è attualmente marchiata per l'avanzamento. Usa il passaggio 'Seleziona Abilità' per marcarne alcune, oppure marchiale dalla scheda del personaggio."
+    },
+
+    "labels": {
+      "marksAvailable": "Marchi di Avanzamento Disponibili",
+      "marksEarned": "Marchi di Avanzamento Ottenuti",
+      "level": "Livello",
+      "yourWeakness": "La Tua Debolezza"
+    },
+
+    "buttons": {
+      "sessionAdvancement": "Avanzamento di Sessione",
+      "markSelected": "Applica Marchi alle Abilità Selezionate",
+      "rollAdvancement": "Tira Tutti i Tiri di Avanzamento",
+      "completeSession": "Completa Sessione",
+      "next": "Avanti",
+      "cancel": "Annulla"
+    },
+
+    "dialog": {
+      "confirmRoll": {
+        "title": "Conferma Tiri di Avanzamento",
+        "content": "Eseguire i tiri di avanzamento per {count} abilità marcate?",
+        "yes": "Tira Tutto",
+        "no": "Annulla"
+      },
+      "confirmComplete": {
+        "title": "Completa Sessione",
+        "content": "Finalizzare l'avanzamento di sessione? Questo registrerà tutti i tiri nel diario e chiuderà la finestra.",
+        "yes": "Completa e Registra",
+        "no": "Annulla"
+      },
+      "confirmCancel": {
+        "title": "Annulla Avanzamento",
+        "content": "Questo ripristinerà tutte le abilità tirate e rimuoverà i marchi aggiunti in questa sessione. Sei sicuro?",
+        "yes": "Ripristina Tutto",
+        "no": "Continua"
+      },
+      "removeWeakness": {
+        "title": "Rimuovi Debolezza",
+        "content": "Hai superato la tua debolezza! Rimuoverla dalla scheda del personaggio? Devi giocare una sessione completa senza una debolezza, poi potrai sceglierne una nuova.",
+        "yes": "Rimuovi Debolezza",
+        "cancel": "Annulla"
+      }
+    },
+
+    "chat": {
+      "sessionSummary": {
+        "title": "Avanzamento di Sessione - {actor}",
+        "marksUsed": "Marchi di avanzamento usati: {count}",
+        "skillsAdvanced": "Abilità migliorate: {count}",
+        "heroicAbilitiesGained": "Capacità Eroiche ottenute: {count}",
+        "maxSkillLevel": "Livello Massimo di Abilità"
+      }
+    },
+
+    "notifications": {
+      "weaknessRemoved": "Debolezza rimossa dalla scheda del personaggio. Ricorda di giocare una sessione completa prima di sceglierne una nuova!",
+      "skillMaxed": "{skill} ha raggiunto il livello massimo di 18 per {actor}! 🎉"
+    },
+
+    "warnings": {
+      "noMoreMarks": "Nessun altro marchio di avanzamento disponibile",
+      "noMarkedSkills": "Nessuna abilità marcata per l'avanzamento",
+      "noSkillsSelected": "Seleziona almeno un'abilità da marcare"
+    },
+
+    "errors": {
+      "socketlibRequired": "Campaign Assistant richiede il modulo socketlib"
+    }
+  }
+}
