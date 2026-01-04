@@ -18,6 +18,7 @@ export const SETTINGS = {
   HIDE_DEFEATED: "hideDefeated",
   HIDE_OVERCAME: "hideOvercame",
   CUSTOM_QUESTIONS: "customQuestions",
+  ADVANCEMENT_ROLL_MODE: "advancementRollMode",
   DEBUG_MODE: "debugMode",
 };
 

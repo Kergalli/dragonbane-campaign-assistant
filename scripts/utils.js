@@ -65,10 +65,14 @@ export class Utils {
 
   /**
    * Get skills marked for advancement
+   * Excludes skills already at max level (18)
    */
   static getMarkedSkills(actor) {
     return actor.items.filter(
-      (item) => item.type === "skill" && !!item.system.advance // Truthy check
+      (item) =>
+        item.type === "skill" &&
+        !!item.system.advance && // Truthy check for advance flag
+        item.system.value < 18 // Exclude skills already at max level
     );
   }
 

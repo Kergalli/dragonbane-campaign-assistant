@@ -2,23 +2,23 @@
   "CAMPAIGN_ASSISTANT": {
     "settings": {
       "enabled": {
-        "name": "Aktivera Kampanjassistent",
-        "hint": "Huvudbrytare för kampanjassistentmodulen"
+        "name": "Aktivera Campaign Assistant",
+        "hint": "Huvudbrytare för Campaign Assistant-modulen"
       },
       "addActorButtons": {
-        "name": "Lägg till Karaktärsarknopar",
-        "hint": "Lägg till Sessionsutveckling-knapp på karaktärsark (kräver omladdning)"
+        "name": "Lägg till knappar på karaktärsblad",
+        "hint": "Lägg till knapp för sessionsutveckling på karaktärsblad (kräver omladdning)"
       },
       "trackSessionHistory": {
-        "name": "Spåra Sessionshistorik",
-        "hint": "Spara sessionsutvecklingshistorik i aktörflaggor"
+        "name": "Spåra sessionshistorik",
+        "hint": "Spara sessionshistorik i aktörsflaggor"
       },
       "useWeaknessRule": {
-        "name": "Använd Valfri Svaghet-regel",
+        "name": "Använd valfri regel för svaghet",
         "hint": "Aktivera svaghetsfrågan i sessionsutveckling (valfri regel från regelboken)"
       },
       "hideParticipated": {
-        "name": "Dölj 'Var du med på spelmötet?'",
+        "name": "Dölj 'Deltog du i spelmötet?'",
         "hint": "Dölj denna utvecklingsfråga från dialogen"
       },
       "hideExplored": {
@@ -34,8 +34,14 @@
         "hint": "Dölj denna utvecklingsfråga från dialogen"
       },
       "customQuestions": {
-        "name": "Anpassade Utvecklingsfrågor",
-        "hint": "Lägg till anpassade utvecklingsfrågor separerade med semikolon. Varje 'ja'-svar ger 1 utvecklingsmarkering. Exempel: Rollspelade du din karaktärs personlighet?; Bidrog du till gruppens framgång?; Bidrog du till berättelsen?"
+        "name": "Anpassade utvecklingsfrågor",
+        "hint": "Lägg till anpassade utvecklingsfrågor separerade med semikolon. Varje 'ja'-svar ger 1 markering. Exempel: Rollspelade du din karaktär väl?; Hjälpte du gruppen att lyckas?; Bidrog du till berättelsen?"
+      },
+      "advancementRollMode": {
+        "name": "Läge för utvecklingsslag",
+        "hint": "Välj hur färdighetsutvecklingsslag hanteras i steg 3. Samlat: Slå alla färdigheter på en gång med en sammanfattning. Individuellt: Klicka på varje färdighet för att slå dem en i taget.",
+        "bulk": "Samlat slagning (Slå alla på en gång)",
+        "individual": "Individuellt slagning (Klicka på varje färdighet)"
       },
       "debugMode": {
         "name": "Felsökningsläge",
@@ -44,20 +50,20 @@
     },
 
     "questions": {
-      "participated": "Var du med på spelmötet?",
+      "participated": "Deltog du i spelmötet?",
       "explored": "Utforskade du en ny plats?",
       "defeated": "Besegrade du en eller flera farliga fiender?",
       "overcame": "Övervann du ett hinder utan att använda våld?",
-      "weaknessLabel": "Svaghet",
-      "weaknessNone": "Engagerade inte med svaghet",
+      "weaknessQuestion": "Hur engagerade du dig med din svaghet?",
+      "weaknessNone": "Engagerade mig inte med svaghet",
       "weaknessGaveIn": "Gav efter för din svaghet",
-      "weaknessOvercame": "Agerade emot din svaghet"
+      "weaknessOvercame": "Agerade mot din svaghet"
     },
 
     "steps": {
       "questions": "Frågor",
-      "select": "Välj Färdigheter",
-      "roll": "Redo att Slå"
+      "select": "Välj färdigheter",
+      "roll": "Redo att slå"
     },
 
     "instructions": {
@@ -65,6 +71,8 @@
       "selectMore": "Klicka på färdigheter för att välja dem för markering. Du har markeringar kvar.",
       "readyToMark": "Klicka på 'Markera Valda Färdigheter' när du är redo att fortsätta.",
       "readyToRoll": "Klicka på 'Slå Alla Förbättringsslag' för att slå för alla markerade färdigheter.",
+      "readyToRollIndividual": "Klicka på färdigheter för att slå dem individuellt. När alla är slagna, klicka på Slutför Session för att avsluta.",
+      "allSkillsRolled": "Alla färdigheter slagna! Klicka på Slutför Session för att avsluta och spara resultat.",
       "advancementRule": "Om du slår högre än ditt nuvarande FV ökar färdighetsvärdet ett steg, upp till maximala 18.",
       "noMarksToUse": "Inga utvecklingsmarkeringar tillgängliga. Klicka på 'Nästa' för att fortsätta till slagning.",
       "noSkills": "Inga färdigheter tillgängliga att markera. Svara på frågorna först för att tjäna markeringar, eller återvänd till ditt karaktärsark för att rensa några befintliga markeringar.",
@@ -82,6 +90,7 @@
       "sessionAdvancement": "Sessionsutveckling",
       "markSelected": "Markera Valda Färdigheter",
       "rollAdvancement": "Slå Alla Förbättringsslag",
+      "completeSession": "Slutför Session",
       "next": "Nästa",
       "cancel": "Avbryt"
     },
@@ -92,6 +101,18 @@
         "content": "Slå förbättringsslag för {count} markerade färdigheter?",
         "yes": "Slå alla",
         "no": "Avbryt"
+      },
+      "confirmComplete": {
+        "title": "Slutför Session",
+        "content": "Slutför sessionsutveckling? Detta kommer att spara alla slag till journalen och stänga dialogen.",
+        "yes": "Slutför & Spara",
+        "no": "Avbryt"
+      },
+      "confirmCancel": {
+        "title": "Avbryt Utveckling",
+        "content": "Detta kommer att återställa alla slagna färdigheter och ta bort markeringar tillagda denna session. Är du säker?",
+        "yes": "Återställ Allt",
+        "no": "Fortsätt Arbeta"
       },
       "removeWeakness": {
         "title": "Ta bort svaghet",

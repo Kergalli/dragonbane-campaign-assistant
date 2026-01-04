@@ -1,9 +1,10 @@
 /**
  * Session Advancement Dialog
  * Handles the 5 advancement questions and skill marking workflow
+ * Supports two modes: Bulk (roll all at once) and Individual (click each skill)
  */
 
-import { MODULE_ID, SOCKET_EVENTS } from "./constants.js";
+import { MODULE_ID, SETTINGS, SOCKET_EVENTS } from "./constants.js";
 import { Utils } from "./utils.js";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
@@ -34,6 +35,11 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     this.originalMarkedSkills = new Set(
       Utils.getMarkedSkills(this.actor).map((s) => s.id)
     );
+
+    // Individual mode state
+    this.rolledSkills = new Set(); // Track which skills have been rolled
+    this.rollResults = []; // Store roll results for journal/summary
+    this.skillsToRoll = new Set(); // Track which skills need rolling (set at start of Step 3)
   }
 
   static DEFAULT_OPTIONS = {
@@ -59,7 +65,9 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     },
     actions: {
       markSkill: SessionAdvancementDialog.prototype._onMarkSkill,
+      rollSingleSkill: SessionAdvancementDialog.prototype._onRollSingleSkill,
       rollAdvancement: SessionAdvancementDialog.prototype._onRollAdvancement,
+      completeSession: SessionAdvancementDialog.prototype._onCompleteSession,
       complete: SessionAdvancementDialog.prototype._onComplete,
       nextStep: SessionAdvancementDialog.prototype._onNextStep,
       cancel: SessionAdvancementDialog.prototype._onCancel,
@@ -80,8 +88,33 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
 
+    // Check advancement roll mode early - needed for allSkillsForDisplay logic
+    const advancementRollMode =
+      Utils.getSetting(SETTINGS.ADVANCEMENT_ROLL_MODE) || "bulk";
+    const isBulkMode = advancementRollMode === "bulk";
+    const isIndividualMode = advancementRollMode === "individual";
+
     const markedSkills = Utils.getMarkedSkills(this.actor);
     const unmarkedSkills = Utils.getUnmarkedSkills(this.actor);
+
+    // In individual mode Step 3, we need to show ALL skills that were marked at start of Step 3
+    // (not just those with advance flag), so include rolled skills
+    let allSkillsForDisplay = [...markedSkills];
+    if (
+      isIndividualMode &&
+      this.currentStep === 3 &&
+      this.skillsToRoll.size > 0
+    ) {
+      // Add any rolled skills that no longer have advance flag
+      for (const skillId of this.skillsToRoll) {
+        if (!markedSkills.find((s) => s.id === skillId)) {
+          const skill = this.actor.items.get(skillId);
+          if (skill) {
+            allSkillsForDisplay.push(skill);
+          }
+        }
+      }
+    }
 
     // Get character's current weakness
     const currentWeakness =
@@ -150,6 +183,13 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     this.additionalMarks = regularMarks + customMarks + weaknessMarks;
 
+    // Individual mode specific context
+    // Use skillsToRoll (skills that needed rolling at start of Step 3) instead of markedSkills
+    const allSkillsRolled =
+      isIndividualMode &&
+      this.skillsToRoll.size > 0 &&
+      this.skillsToRoll.size === this.rolledSkills.size;
+
     return {
       ...context,
       actor: this.actor,
@@ -165,12 +205,13 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       weaknessNoneChecked: this.questionAnswers.weakness === "none",
       weaknessGaveInChecked: this.questionAnswers.weakness === "gavein",
       weaknessOvercameChecked: this.questionAnswers.weakness === "overcame",
-      markedSkills: markedSkills.map((s) => ({
+      markedSkills: allSkillsForDisplay.map((s) => ({
         id: s.id,
         name: s.name,
         level: s.system.value,
         taught: !!s.system.taught,
         newlyMarked: !this.originalMarkedSkills.has(s.id),
+        alreadyRolled: this.rolledSkills.has(s.id),
       })),
       unmarkedSkills: unmarkedSkills.map((s) => ({
         id: s.id,
@@ -183,7 +224,11 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       marksRemaining: this.additionalMarks - this.selectedSkills.size,
       canAddMore: this.selectedSkills.size < this.additionalMarks,
       hasSelectedSkills: this.selectedSkills.size > 0,
-      hasMarkedSkills: markedSkills.length > 0,
+      hasMarkedSkills: allSkillsForDisplay.length > 0,
+      // Mode flags
+      isBulkMode: isBulkMode,
+      isIndividualMode: isIndividualMode,
+      allSkillsRolled: allSkillsRolled,
     };
   }
 
@@ -217,7 +262,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   }
 
   /**
-   * Mark a skill for advancement
+   * Mark a skill for advancement (Step 2)
    */
   async _onMarkSkill(event, target) {
     const skillId = target.dataset.skillId;
@@ -252,6 +297,103 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   }
 
   /**
+   * Roll a single skill (Individual Mode only - Step 3)
+   */
+  async _onRollSingleSkill(event, target) {
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+
+    const skillId = target.dataset.skillId;
+    if (!skillId) return;
+
+    // Check if already rolled - silently ignore
+    if (this.rolledSkills.has(skillId)) {
+      return;
+    }
+
+    const skill = this.actor.items.get(skillId);
+    if (!skill) return;
+
+    // Save scroll position
+    const skillList = this.element?.querySelector(".skill-list.marked");
+    const scrollTop = skillList ? skillList.scrollTop : 0;
+
+    // Roll advancement for this skill
+    const result = await this.#rollSkillAdvancement(skill);
+
+    // Store result
+    this.rollResults.push(result);
+
+    // Mark as rolled
+    this.rolledSkills.add(skillId);
+
+    // Re-render to update UI
+    await this.render();
+
+    // Restore scroll position
+    await this.#restoreScrollPosition(scrollTop);
+  }
+
+  /**
+   * Helper method to roll advancement for a single skill
+   */
+  async #rollSkillAdvancement(skill) {
+    const roll = await new Roll("1d20").evaluate();
+    const success = roll.total > skill.system.value;
+
+    // Calculate new level (capped at 18)
+    const currentLevel = skill.system.value;
+    const newLevel = success ? Math.min(currentLevel + 1, 18) : currentLevel;
+    const reachedMaximum = success && newLevel === 18 && currentLevel < 18;
+
+    if (success) {
+      await skill.update({
+        "system.value": newLevel,
+        "system.advance": false,
+        "system.taught": false,
+      });
+
+      // Special notification for reaching maximum
+      if (reachedMaximum) {
+        ui.notifications.info(
+          Utils.format("CAMPAIGN_ASSISTANT.notifications.skillMaxed", {
+            skill: skill.name,
+            actor: this.actor.name,
+          })
+        );
+      }
+    } else {
+      await skill.update({
+        "system.advance": false,
+        "system.taught": false,
+      });
+    }
+
+    // Create chat message for the roll
+    await roll.toMessage({
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: success
+        ? Utils.format("DoD.skill.advancementSuccess", {
+            skill: skill.name,
+            old: currentLevel,
+            new: newLevel,
+          })
+        : Utils.format("DoD.skill.advancementFail", { skill: skill.name }),
+    });
+
+    return {
+      skill: skill.name,
+      skillId: skill.id,
+      oldLevel: currentLevel,
+      newLevel: newLevel,
+      roll: roll.total,
+      success,
+      reachedMaximum,
+    };
+  }
+
+  /**
    * Restore scroll position after render
    */
   async #restoreScrollPosition(scrollTop) {
@@ -265,7 +407,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   }
 
   /**
-   * Roll advancement for all marked skills
+   * Roll all advancement (Bulk Mode only - Step 3)
    */
   async _onRollAdvancement(event, target) {
     event?.preventDefault?.(); // Prevent form submission
@@ -299,58 +441,8 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     const results = [];
 
     for (const skill of markedSkills) {
-      const roll = await new Roll("1d20").evaluate();
-      const success = roll.total > skill.system.value;
-
-      // Calculate new level (capped at 18)
-      const currentLevel = skill.system.value;
-      const newLevel = success ? Math.min(currentLevel + 1, 18) : currentLevel;
-      const reachedMaximum = success && newLevel === 18 && currentLevel < 18;
-
-      if (success) {
-        await skill.update({
-          "system.value": newLevel,
-          "system.advance": false,
-          "system.taught": false,
-        });
-
-        // Special notification for reaching maximum
-        if (reachedMaximum) {
-          ui.notifications.info(
-            Utils.format("CAMPAIGN_ASSISTANT.notifications.skillMaxed", {
-              skill: skill.name,
-              actor: this.actor.name,
-            })
-          );
-        }
-      } else {
-        await skill.update({
-          "system.advance": false,
-          "system.taught": false,
-        });
-      }
-
-      results.push({
-        skill: skill.name,
-        oldLevel: currentLevel,
-        newLevel: newLevel,
-        roll: roll.total,
-        success,
-        reachedMaximum,
-      });
-
-      // Create chat message for the roll
-      await roll.toMessage({
-        user: game.user.id,
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: success
-          ? Utils.format("DoD.skill.advancementSuccess", {
-              skill: skill.name,
-              old: currentLevel,
-              new: newLevel,
-            })
-          : Utils.format("DoD.skill.advancementFail", { skill: skill.name }),
-      });
+      const result = await this.#rollSkillAdvancement(skill);
+      results.push(result);
     }
 
     // Store session in history
@@ -367,7 +459,47 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   }
 
   /**
-   * Complete session - mark selected skills and prepare for rolling
+   * Complete session (Individual Mode only - Step 3)
+   * Called when all skills have been rolled individually
+   */
+  async _onCompleteSession(event, target) {
+    event?.preventDefault?.();
+
+    // Confirm
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: {
+        title: Utils.localize(
+          "CAMPAIGN_ASSISTANT.dialog.confirmComplete.title"
+        ),
+      },
+      content: Utils.localize(
+        "CAMPAIGN_ASSISTANT.dialog.confirmComplete.content"
+      ),
+      yes: {
+        label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmComplete.yes"),
+      },
+      no: {
+        label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmComplete.no"),
+      },
+    });
+
+    if (!confirmed) return;
+
+    // Store session in history
+    await this._saveSessionData(this.rollResults);
+
+    // Show summary
+    await this._showSummary(this.rollResults);
+
+    // Record to journal via socket (GM will handle it)
+    await this._recordToJournal(this.rollResults);
+
+    // Close dialog
+    await this.close();
+  }
+
+  /**
+   * Complete session - mark selected skills and prepare for rolling (Step 2)
    */
   async _onComplete(event, target) {
     event?.preventDefault?.(); // Prevent form submission
@@ -399,6 +531,14 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     // Move to step 3
     this.currentStep = 3;
+
+    // In individual mode, capture the list of skills to roll
+    const advancementRollMode =
+      Utils.getSetting(SETTINGS.ADVANCEMENT_ROLL_MODE) || "bulk";
+    if (advancementRollMode === "individual") {
+      const markedSkills = Utils.getMarkedSkills(this.actor);
+      this.skillsToRoll = new Set(markedSkills.map((s) => s.id));
+    }
 
     // Re-render to show updated marked skills
     await this.render();
@@ -464,6 +604,78 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   }
 
   /**
+   * Cancel and close dialog
+   */
+  async _onCancel(event, target) {
+    event?.preventDefault?.();
+
+    const advancementRollMode =
+      Utils.getSetting(SETTINGS.ADVANCEMENT_ROLL_MODE) || "bulk";
+    const isIndividualMode = advancementRollMode === "individual";
+
+    // If in Step 3 with individual mode and have rolled skills, confirm revert
+    if (
+      this.currentStep === 3 &&
+      isIndividualMode &&
+      this.rolledSkills.size > 0
+    ) {
+      const confirmed = await foundry.applications.api.DialogV2.confirm({
+        window: {
+          title: Utils.localize(
+            "CAMPAIGN_ASSISTANT.dialog.confirmCancel.title"
+          ),
+        },
+        content: Utils.localize(
+          "CAMPAIGN_ASSISTANT.dialog.confirmCancel.content"
+        ),
+        yes: {
+          label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmCancel.yes"),
+        },
+        no: {
+          label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmCancel.no"),
+        },
+      });
+
+      if (!confirmed) return;
+
+      // Revert rolled skills
+      const updates = [];
+      for (const result of this.rollResults) {
+        const skill = this.actor.items.get(result.skillId);
+        if (skill) {
+          updates.push(
+            skill.update({
+              "system.value": result.oldLevel,
+              "system.advance": true,
+            })
+          );
+        }
+      }
+
+      await Promise.all(updates);
+      ui.notifications.info("Advancement cancelled - skills reverted");
+    }
+
+    // If in Step 2 or Step 3, unmark skills that were marked this session
+    if (this.currentStep >= 2) {
+      const updates = [];
+      const markedSkills = Utils.getMarkedSkills(this.actor);
+
+      for (const skill of markedSkills) {
+        if (!this.originalMarkedSkills.has(skill.id)) {
+          updates.push(skill.update({ "system.advance": false }));
+        }
+      }
+
+      if (updates.length > 0) {
+        await Promise.all(updates);
+      }
+    }
+
+    await this.close();
+  }
+
+  /**
    * Save session data to actor history
    */
   async _saveSessionData(results) {
@@ -497,9 +709,9 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       .filter((r) => r.success)
       .map((r) => {
         const maxLabel = r.reachedMaximum
-          ? ` ${Utils.localize(
+          ? ` <strong>(${Utils.localize(
               "CAMPAIGN_ASSISTANT.chat.sessionSummary.maxSkillLevel"
-            )}`
+            )})</strong>`
           : "";
         return `<li>${r.skill} (${r.oldLevel} → ${r.newLevel})${maxLabel}</li>`;
       })
@@ -507,10 +719,10 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     const heroicAbilitiesLine =
       heroicAbilitiesCount > 0
-        ? `<p>${Utils.format(
+        ? `<p><strong>${Utils.format(
             "CAMPAIGN_ASSISTANT.chat.sessionSummary.heroicAbilitiesGained",
             { count: heroicAbilitiesCount }
-          )}</p>`
+          )}</strong></p>`
         : "";
 
     const content = `
@@ -518,63 +730,48 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
         <h3>${Utils.format("CAMPAIGN_ASSISTANT.chat.sessionSummary.title", {
           actor: this.actor.name,
         })}</h3>
-        <p>${Utils.format("CAMPAIGN_ASSISTANT.chat.sessionSummary.marksUsed", {
-          count: results.length,
-        })}</p>
-        <p>${Utils.format(
+        <p><strong>${Utils.format(
+          "CAMPAIGN_ASSISTANT.chat.sessionSummary.marksUsed",
+          { count: results.length }
+        )}</strong></p>
+        <p><strong>${Utils.format(
           "CAMPAIGN_ASSISTANT.chat.sessionSummary.skillsAdvanced",
           { count: successCount }
-        )}</p>
+        )}</strong></p>
         ${heroicAbilitiesLine}
-        ${successCount > 0 ? `<ul>${successList}</ul>` : ""}
+        ${
+          successCount > 0
+            ? `<ul>${successList}</ul>`
+            : `<p><em>No skills advanced this session.</em></p>`
+        }
       </div>
     `;
 
     await ChatMessage.create({
       user: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content,
+      content: content,
     });
   }
 
   /**
-   * Record advancement to GM journal via socket
+   * Record session to journal (via socket for GM)
    */
   async _recordToJournal(results) {
-    // Access socket from game object
-    const socket = game.modules.get(MODULE_ID)?.socket;
-
-    if (socket) {
-      // Send to GM via socket
-      await socket.executeForEveryone(
-        SOCKET_EVENTS.RECORD_ADVANCEMENT,
-        this.actor.id,
-        this.actor.name,
-        results
-      );
-    }
-  }
-
-  /**
-   * Handle cancel button
-   */
-  async _onCancel(event, target) {
-    event?.preventDefault?.();
-
-    // Step 3: Unmark any skills that were marked in Step 2
-    if (this.currentStep === 3) {
-      const currentMarkedSkills = Utils.getMarkedSkills(this.actor);
-
-      // Unmark skills that weren't originally marked
-      for (const skill of currentMarkedSkills) {
-        if (!this.originalMarkedSkills.has(skill.id)) {
-          await skill.update({ "system.advance": false });
-        }
-      }
+    // Always record to journal - no separate setting needed
+    // Use socketlib socket to have GM create/update journal
+    const socket = game.modules.get(MODULE_ID).socket;
+    if (!socket) {
+      console.error("Socket not available for journal recording");
+      return;
     }
 
-    // Step 2: Just close (nothing to undo)
-    // Step 3: Close after unmarking
-    await this.close();
+    // Call the registered socket event with the correct parameters
+    await socket.executeForEveryone(
+      SOCKET_EVENTS.RECORD_ADVANCEMENT,
+      this.actor.id,
+      this.actor.name,
+      results
+    );
   }
 }

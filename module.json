@@ -2,7 +2,7 @@
   "id": "dragonbane-campaign-assistant",
   "title": "Dragonbane Campaign Assistant",
   "description": "Campaign management and character progression tools for Dragonbane - featuring automated session-end advancement workflow with the 5 advancement questions, bulk skill rolling, and automatic GM journal tracking. Complements the core Dragonbane system's built-in mechanics.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
     {
       "name": "Matthias Weeks",
@@ -50,5 +50,5 @@
   "url": "https://github.com/Kergalli/dragonbane-campaign-assistant",
   "bugs": "https://github.com/Kergalli/dragonbane-campaign-assistant/issues",
   "manifest": "https://github.com/Kergalli/dragonbane-campaign-assistant/releases/latest/download/module.json",
-  "download": "https://github.com/Kergalli/dragonbane-campaign-assistant/releases/download/v1.0.0/module.zip"
+  "download": "https://github.com/Kergalli/dragonbane-campaign-assistant/releases/download/v1.1.0/module.zip"
 }

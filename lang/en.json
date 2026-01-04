@@ -37,6 +37,12 @@
         "name": "Custom Advancement Questions",
         "hint": "Add custom advancement questions separated by semicolons. Each 'yes' answer grants 1 mark. Example: Did you roleplay your character well?; Did you help the party succeed?; Did you contribute to the story?"
       },
+      "advancementRollMode": {
+        "name": "Advancement Roll Mode",
+        "hint": "Choose how skill advancement rolls are handled in Step 3. Bulk: Roll all skills at once with one summary. Individual: Click each skill to roll them one at a time.",
+        "bulk": "Bulk Rolling (Roll All at Once)",
+        "individual": "Individual Rolling (Click Each Skill)"
+      },
       "debugMode": {
         "name": "Debug Mode",
         "hint": "Enable detailed console logging for troubleshooting"
@@ -48,7 +54,7 @@
       "explored": "Did you explore a new location?",
       "defeated": "Did you defeat one or more dangerous adversaries?",
       "overcame": "Did you overcome an obstacle without using force?",
-      "weaknessLabel": "How did you engage with your weakness?",
+      "weaknessQuestion": "How did you engage with your weakness?",
       "weaknessNone": "Did not engage with weakness",
       "weaknessGaveIn": "Gave in to your weakness",
       "weaknessOvercame": "Acted against your weakness"
@@ -65,6 +71,8 @@
       "selectMore": "Click skills to select them for marking. You have marks remaining.",
       "readyToMark": "Click 'Mark Selected Skills' when ready to proceed.",
       "readyToRoll": "Click 'Roll All Advancement' to roll for all marked skills.",
+      "readyToRollIndividual": "Click skills to roll them individually. When all are rolled, click Complete Session to finish.",
+      "allSkillsRolled": "All skills rolled! Click Complete Session to finish and record results.",
       "advancementRule": "If the roll exceeds your current skill level, the skill is increased by one, up to a maximum of 18.",
       "noMarksToUse": "No advancement marks available. Click 'Next' to proceed to rolling.",
       "noSkills": "No skills available to mark. Answer the questions first to earn marks, or return to your character sheet to clear some existing marks.",
@@ -82,6 +90,7 @@
       "sessionAdvancement": "Session Advancement",
       "markSelected": "Mark Selected Skills",
       "rollAdvancement": "Roll All Advancement",
+      "completeSession": "Complete Session",
       "next": "Next",
       "cancel": "Cancel"
     },
@@ -92,6 +101,18 @@
         "content": "Roll advancement for {count} marked skills?",
         "yes": "Roll All",
         "no": "Cancel"
+      },
+      "confirmComplete": {
+        "title": "Complete Session",
+        "content": "Finalize session advancement? This will record all rolls to the journal and close the dialog.",
+        "yes": "Complete & Record",
+        "no": "Cancel"
+      },
+      "confirmCancel": {
+        "title": "Cancel Advancement",
+        "content": "This will revert all rolled skills and remove marks added this session. Are you sure?",
+        "yes": "Revert Everything",
+        "no": "Keep Working"
       },
       "removeWeakness": {
         "title": "Remove Weakness",

@@ -37,7 +37,15 @@
     {{/if}}
     {{#if isStep3}}
       {{#if hasMarkedSkills}}
-      <em>{{localize "CAMPAIGN_ASSISTANT.instructions.readyToRoll"}}</em>
+        {{#if isIndividualMode}}
+          {{#if allSkillsRolled}}
+          <em>{{localize "CAMPAIGN_ASSISTANT.instructions.allSkillsRolled"}}</em>
+          {{else}}
+          <em>{{localize "CAMPAIGN_ASSISTANT.instructions.readyToRollIndividual"}}</em>
+          {{/if}}
+        {{else}}
+          <em>{{localize "CAMPAIGN_ASSISTANT.instructions.readyToRoll"}}</em>
+        {{/if}}
       {{/if}}
     {{/if}}
   </div>
@@ -65,7 +73,7 @@
   </div>
   {{/unless}}
 
-  {{!-- STEP 1: Questions --}}
+  {{!-- STEP 1: Answer Questions --}}
   {{#if isStep1}}
   <div class="step-content">
     <div class="text-box-editor questions-section">
@@ -79,18 +87,20 @@
           <input 
             type="checkbox" 
             name="question_{{id}}" 
-            {{checked checked}}
+            value="true"
+            {{#if checked}}checked{{/if}}
             onchange="this.form.requestSubmit()"
           />
           <span>{{label}}</span>
         </label>
         {{/each}}
-        
-        {{!-- Weakness Question with Radio Buttons (Optional Rule) --}}
+
+        {{!-- Weakness Question - only if character has weakness and rule is enabled --}}
         {{#if useWeaknessRule}}
         {{#if hasWeakness}}
         <div class="weakness-question">
-          <label class="weakness-heading"><strong>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessLabel"}}</strong></label>
+          <strong class="weakness-heading">{{localize "CAMPAIGN_ASSISTANT.questions.weaknessQuestion"}}</strong>
+          
           <div class="weakness-options">
             <label class="weakness-option">
               <input 
@@ -102,6 +112,7 @@
               />
               <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessNone"}}</span>
             </label>
+            
             <label class="weakness-option">
               <input 
                 type="radio" 
@@ -112,6 +123,7 @@
               />
               <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessGaveIn"}} <em>(+1 mark)</em></span>
             </label>
+            
             <label class="weakness-option">
               <input 
                 type="radio" 
@@ -180,25 +192,35 @@
       
       <div class="skill-list marked">
         {{#each markedSkills}}
-        <div class="skill-item {{#if newlyMarked}}newly-marked{{else}}marked{{/if}}">
+        <div class="skill-item {{#if newlyMarked}}newly-marked{{else}}marked{{/if}} {{#if alreadyRolled}}already-rolled{{/if}}" 
+             {{#if ../isIndividualMode}}
+               {{#unless alreadyRolled}}data-action="rollSingleSkill"{{/unless}}
+             {{/if}}
+             data-skill-id="{{id}}">
           <span class="skill-name">
             {{name}}
             {{#if taught}}<i class="fas fa-graduation-cap" title="Trained with teacher"></i>{{/if}}
           </span>
           <span class="skill-level">{{localize "CAMPAIGN_ASSISTANT.labels.level"}}: {{level}}</span>
-          {{#if newlyMarked}}
+          {{#if alreadyRolled}}
           <i class="fas fa-check-circle"></i>
           {{else}}
-          <i class="fas fa-dice-d20"></i>
+            {{#if ../isIndividualMode}}
+            <i class="fas fa-dice-d20"></i>
+            {{else}}
+            <i class="fas fa-check"></i>
+            {{/if}}
           {{/if}}
         </div>
         {{/each}}
       </div>
     </div>
     
+    {{#unless allSkillsRolled}}
     <div class="rules-reminder">
       <em>{{localize "CAMPAIGN_ASSISTANT.instructions.advancementRule"}}</em>
     </div>
+    {{/unless}}
     {{else}}
     <div class="empty-state">
       <p><em>{{localize "CAMPAIGN_ASSISTANT.instructions.noMarkedSkills"}}</em></p>
@@ -240,10 +262,20 @@
       <span>{{localize "CAMPAIGN_ASSISTANT.buttons.cancel"}}</span>
     </button>
     {{#if hasMarkedSkills}}
-    <button type="submit" data-action="rollAdvancement">
-      <i class="fas fa-dice-d20"></i>
-      <span>{{localize "CAMPAIGN_ASSISTANT.buttons.rollAdvancement"}}</span>
-    </button>
+      {{#if isBulkMode}}
+      <button type="submit" data-action="rollAdvancement">
+        <i class="fas fa-dice-d20"></i>
+        <span>{{localize "CAMPAIGN_ASSISTANT.buttons.rollAdvancement"}}</span>
+      </button>
+      {{else}}
+        {{!-- Individual mode --}}
+        {{#if allSkillsRolled}}
+        <button type="submit" data-action="completeSession">
+          <i class="fas fa-check"></i>
+          <span>{{localize "CAMPAIGN_ASSISTANT.buttons.completeSession"}}</span>
+        </button>
+        {{/if}}
+      {{/if}}
     {{/if}}
     {{/if}}
   </footer>

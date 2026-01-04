@@ -113,6 +113,28 @@ export function registerSettings() {
     default: "",
   });
 
+  // Advancement roll mode
+  game.settings.register(MODULE_ID, SETTINGS.ADVANCEMENT_ROLL_MODE, {
+    name: game.i18n.localize(
+      "CAMPAIGN_ASSISTANT.settings.advancementRollMode.name"
+    ),
+    hint: game.i18n.localize(
+      "CAMPAIGN_ASSISTANT.settings.advancementRollMode.hint"
+    ),
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      bulk: game.i18n.localize(
+        "CAMPAIGN_ASSISTANT.settings.advancementRollMode.bulk"
+      ),
+      individual: game.i18n.localize(
+        "CAMPAIGN_ASSISTANT.settings.advancementRollMode.individual"
+      ),
+    },
+    default: "bulk",
+  });
+
   // Debug mode
   game.settings.register(MODULE_ID, SETTINGS.DEBUG_MODE, {
     name: game.i18n.localize("CAMPAIGN_ASSISTANT.settings.debugMode.name"),

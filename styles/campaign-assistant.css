@@ -8,6 +8,8 @@
   font-family: var(--dod-font-primary);
 }
 
+/* Override the base .system-dragonbane form .window-content rule with higher specificity
+   This mirrors how character sheet overrides dialog background */
 .system-dragonbane
   form
   .window-content.dragonbane.campaign-assistant.session-advancement {
@@ -411,6 +413,22 @@
   transform: none;
 }
 
+/* Already rolled skills - light gray, non-clickable */
+.session-advancement .skill-item.already-rolled {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: default;
+  opacity: 0.8;
+}
+
+.session-advancement .skill-item.already-rolled:hover {
+  text-shadow: none;
+  transform: none;
+}
+
+.session-advancement .skill-item.already-rolled .fa-check-circle {
+  color: #666;
+}
+
 .session-advancement .skill-name {
   font-weight: bold;
   flex: 1;
@@ -431,23 +449,11 @@
   margin-right: 0.5rem;
 }
 
-/* Default icon color (fallback) */
 .session-advancement .skill-item i {
-  color: #00604d;
+  color: #228b22;
 }
 
-/* Marked skills (already on character sheet) - dice icon in green */
 .session-advancement .skill-item.marked i {
-  color: #00604d;
-}
-
-/* Newly marked skills (selected in Step 2) - checkmark in teal */
-.session-advancement .skill-item.newly-marked .fa-check-circle {
-  color: #00604d;
-}
-
-/* Step 2 selected skills - checkmark in teal (existing rule) */
-.session-advancement .skill-item.selected .fa-check-circle {
   color: #00604d;
 }
 
@@ -476,14 +482,25 @@
   font-size: 1rem !important;
   padding: 20px !important;
   line-height: normal !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease !important;
+  color: #000 !important;
 }
 
-.session-advancement .form-footer button:hover {
-  color: whitesmoke;
-  background: url("../../../systems/dragonbane/art/ui/button-bg.webp");
-  background-repeat: repeat-x;
-  background-size: cover;
-  background-clip: border-box;
+.session-advancement .form-footer button span,
+.session-advancement .form-footer button i {
+  color: #000 !important;
+  transition: color 0.2s ease !important;
+}
+
+.session-advancement .form-footer button:hover,
+.session-advancement .form-footer button:hover span,
+.session-advancement .form-footer button:hover i {
+  color: whitesmoke !important;
+  background: url("../../../systems/dragonbane/art/ui/button-bg.webp") !important;
+  background-repeat: repeat-x !important;
+  background-size: cover !important;
+  background-clip: border-box !important;
 }
 
 /* Character Sheet Button - Window Header Icon */
@@ -523,4 +540,20 @@
 .dragonbane.campaign-assistant.session-summary li {
   margin: 0.15rem 0;
   font-weight: normal;
+}
+
+/* Already rolled skills (individual mode) - light gray, non-clickable */
+.session-advancement .skill-item.already-rolled {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: default;
+  opacity: 0.8;
+}
+
+.session-advancement .skill-item.already-rolled:hover {
+  text-shadow: none;
+  transform: none;
+}
+
+.session-advancement .skill-item.already-rolled .fa-check-circle {
+  color: #666;
 }
