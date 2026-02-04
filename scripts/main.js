@@ -47,7 +47,7 @@ class DragonbaneCampaignAssistant {
     if (!game.modules.get("socketlib")?.active) {
       console.error(`${MODULE_NAME} requires socketlib module`);
       ui.notifications.error(
-        Utils.localize("CAMPAIGN_ASSISTANT.errors.socketlibRequired")
+        Utils.localize("CAMPAIGN_ASSISTANT.errors.socketlibRequired"),
       );
       return;
     }
@@ -81,26 +81,42 @@ class DragonbaneCampaignAssistant {
       }
     });
 
+    // ENHANCED: Now accepts full sessionData object instead of individual parameters
     this.socket.register(
       SOCKET_EVENTS.RECORD_ADVANCEMENT,
-      async (actorId, actorName, results) => {
+      async (sessionData) => {
         // Only GM processes this
         if (!game.user.isGM) return;
 
-        await this._recordAdvancementToJournal(actorId, actorName, results);
-      }
+        await this._recordAdvancementToJournal(sessionData);
+      },
     );
 
     Utils.debugLog("Main", "Socket registered");
   }
 
   /**
-   * Record advancement to journal (GM only)
+   * ENHANCED: Record advancement to journal (GM only) with rich context
    */
-  static async _recordAdvancementToJournal(actorId, actorName, results) {
+  static async _recordAdvancementToJournal(sessionData) {
+    // Only GM processes this
+    if (!game.user.isGM) return;
+
+    const {
+      actorId,
+      actorName,
+      timestamp,
+      results,
+      questions,
+      customQuestions,
+      weakness,
+      marks,
+      skillsMarkedThisSession,
+    } = sessionData;
+
     // Find or create "Advancement History" folder
     let folder = game.folders.find(
-      (f) => f.name === "Advancement History" && f.type === "JournalEntry"
+      (f) => f.name === "Advancement History" && f.type === "JournalEntry",
     );
 
     if (!folder) {
@@ -113,7 +129,7 @@ class DragonbaneCampaignAssistant {
 
     // Find existing journal or create new one
     let journal = game.journal.find(
-      (j) => j.name === actorName && j.folder?.id === folder.id
+      (j) => j.name === actorName && j.folder?.id === folder.id,
     );
 
     if (!journal) {
@@ -123,68 +139,167 @@ class DragonbaneCampaignAssistant {
       });
     }
 
-    // Format the session data
-    const successCount = results.filter((r) => r.success).length;
-    const heroicAbilitiesCount = results.filter((r) => r.reachedMaximum).length;
-    const date = new Date().toLocaleDateString(game.i18n.lang, {
+    // Format the date
+    const date = new Date(timestamp);
+    const formattedDate = date.toLocaleDateString(game.i18n.lang, {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
 
-    const successList = results
-      .filter((r) => r.success)
-      .map((r) => {
-        const maxLabel = r.reachedMaximum
-          ? " <strong>(Max Level 18)</strong>"
-          : "";
-        return `<li>${r.skill} (${r.oldLevel} → ${r.newLevel})${maxLabel}</li>`;
-      })
-      .join("");
+    // Calculate statistics
+    const successCount = results.filter((r) => r.success).length;
+    const heroicAbilitiesCount = results.filter((r) => r.reachedMaximum).length;
 
-    const heroicAbilitiesLine =
-      heroicAbilitiesCount > 0
-        ? `<p><strong>Heroic Abilities gained: ${heroicAbilitiesCount}</strong></p>`
-        : "";
+    // Build the journal entry
+    let entryHTML = `<h1>${formattedDate}</h1>\n<p></p>\n`;
 
-    const newEntry = `
-      <hr>
-      <h2>${date}</h2>
-      <p><strong>Advancement marks used: ${results.length}</strong></p>
-      <p><strong>Skills advanced: ${successCount}</strong></p>
-      ${heroicAbilitiesLine}
-      ${
-        successCount > 0
-          ? `<ul>${successList}</ul>`
-          : "<p><em>No skills advanced this session.</em></p>"
+    // === SECTION 1: ADVANCEMENT QUESTIONS ===
+    const questionLabels = {
+      participated: Utils.localize("CAMPAIGN_ASSISTANT.questions.participated"),
+      explored: Utils.localize("CAMPAIGN_ASSISTANT.questions.explored"),
+      defeated: Utils.localize("CAMPAIGN_ASSISTANT.questions.defeated"),
+      overcame: Utils.localize("CAMPAIGN_ASSISTANT.questions.overcame"),
+    };
+
+    const questionsAnswered = [];
+    for (const [key, label] of Object.entries(questionLabels)) {
+      if (questions[key]) {
+        questionsAnswered.push(`<li>${label}</li>`);
       }
-    `;
+    }
 
-    // Get existing pages
+    // Add custom questions
+    if (customQuestions && Object.keys(customQuestions).length > 0) {
+      const customQuestionsText = Utils.getSetting("customQuestions") || "";
+      const customQuestionsList = customQuestionsText
+        .split(";")
+        .map((q) => q.trim())
+        .filter((q) => q.length > 0);
+
+      for (const [key, answered] of Object.entries(customQuestions)) {
+        if (answered) {
+          // Extract numeric index from key like "custom_0", "custom_1"
+          const numericIndex = parseInt(key.replace("custom_", ""));
+          const questionText =
+            customQuestionsList[numericIndex] ||
+            `Custom Question ${numericIndex + 1}`;
+          questionsAnswered.push(`<li>${questionText}</li>`);
+        }
+      }
+    }
+
+    if (questionsAnswered.length > 0) {
+      entryHTML += `<blockquote class="info">\n`;
+      entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.advancementQuestions")}</h3>\n`;
+      entryHTML += `    <ul style="margin-top:25px;font-style:normal;margin-right:20px">\n`;
+      entryHTML += `        ${questionsAnswered.join("\n        ")}\n`;
+      entryHTML += `    </ul>\n`;
+      entryHTML += `</blockquote>\n`;
+    }
+
+    // === SECTION 2: WEAKNESS ===
+    if (questions.weakness && questions.weakness !== "none" && weakness?.text) {
+      // Strip HTML tags from weakness text
+      const cleanWeakness = weakness.text.replace(/<[^>]*>/g, "").trim();
+
+      entryHTML += `<blockquote class="info">\n`;
+      entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.weakness")}</h3>\n`;
+      entryHTML += `    <ul style="margin-top:25px;font-style:normal;margin-right:20px">\n`;
+      entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.currentWeakness")}</strong> ${cleanWeakness}</li>\n`;
+
+      if (questions.weakness === "gavein") {
+        entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.gaveInToWeakness")}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.gaveInDescription")}</li>\n`;
+      } else if (questions.weakness === "overcame") {
+        entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.overcameWeakness")}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.overcameDescription")}</li>\n`;
+      }
+
+      entryHTML += `    </ul>\n`;
+      entryHTML += `</blockquote>\n`;
+    }
+
+    // === SECTION 3: ADVANCEMENT MARKS ===
+    entryHTML += `<blockquote class="info">\n`;
+    entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.advancementMarks")}</h3>\n`;
+    entryHTML += `    <ul style="margin-top:25px;font-style:normal;margin-right:20px">\n`;
+    entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.totalMarks")}</strong> ${marks.total}</li>\n`;
+    entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromQuestions")}</strong> ${marks.fromQuestions}</li>\n`;
+    entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromAutoMarks")}</strong> ${marks.fromAutoMarks}</li>\n`;
+    entryHTML += `    </ul>\n`;
+    entryHTML += `</blockquote>\n`;
+
+    // === SECTION 4: RESULTS ===
+    entryHTML += `<blockquote class="info">\n`;
+    entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.results")}</h3>\n`;
+    entryHTML += `    <p style="margin-right:20px"><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.skillsAdvanced")}</strong> ${successCount} ${Utils.localize("CAMPAIGN_ASSISTANT.journal.of")} ${results.length}</p>\n`;
+
+    // Skills that advanced
+    if (successCount > 0) {
+      entryHTML += `    <ul style="font-style:normal;margin-right:20px">\n`;
+      for (const r of results.filter((r) => r.success)) {
+        const maxLabel = r.reachedMaximum
+          ? ` <strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.maxLevelHeroic")}</strong>`
+          : "";
+        entryHTML += `        <li><strong>${r.skill}</strong>: ${r.oldLevel} → <strong>${r.newLevel}</strong>${maxLabel}</li>\n`;
+      }
+      entryHTML += `    </ul>\n`;
+    }
+
+    // Skills that did not advance
+    const failedResults = results.filter((r) => !r.success);
+    if (failedResults.length > 0) {
+      entryHTML += `    <p style="margin-right:20px"><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.skillsNotAdvanced")}</strong></p>\n`;
+      entryHTML += `    <ul style="font-style:normal;margin-right:20px">\n`;
+      for (const r of failedResults) {
+        entryHTML += `        <li><strong>${r.skill}</strong>: ${Utils.localize("CAMPAIGN_ASSISTANT.journal.remainedAt")} ${r.oldLevel}</li>\n`;
+      }
+      entryHTML += `    </ul>\n`;
+    }
+
+    // Heroic abilities summary
+    if (heroicAbilitiesCount > 0) {
+      const heroicLabel =
+        heroicAbilitiesCount === 1
+          ? Utils.localize("CAMPAIGN_ASSISTANT.journal.heroicAbilityGained")
+          : Utils.format("CAMPAIGN_ASSISTANT.journal.heroicAbilitiesGained", {
+              count: heroicAbilitiesCount,
+            });
+      entryHTML += `    <p style="margin-right:20px"><strong>${heroicLabel}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.heroicDescription")}</p>\n`;
+    }
+
+    entryHTML += `</blockquote>\n`;
+
+    // Update or create the journal page
     const pages = journal.pages.contents;
-
-    if (pages.length === 0) {
-      // Create first page without showing name
-      await journal.createEmbeddedDocuments("JournalEntryPage", [
+    if (pages.length > 0) {
+      // Prepend to existing page (newest first)
+      const existingPage = pages[0];
+      await existingPage.update({
+        text: {
+          content: entryHTML + existingPage.text.content,
+        },
+      });
+    } else {
+      // Create new page with title display turned off
+      await JournalEntryPage.create(
         {
-          name: "Log",
+          name: "Advancement History",
           type: "text",
           title: {
             show: false,
           },
           text: {
-            content: newEntry,
-            format: CONST.JOURNAL_ENTRY_PAGE_FORMATS.HTML,
+            content: entryHTML,
           },
         },
-      ]);
-    } else {
-      // Append to first page
-      const page = pages[0];
-      await page.update({
-        "text.content": page.text.content + newEntry,
-      });
+        { parent: journal },
+      );
     }
+
+    Utils.debugLog(
+      "Journal",
+      `Recorded advancement for ${actorName} on ${formattedDate}`,
+    );
   }
 
   /**
@@ -224,7 +339,7 @@ class DragonbaneCampaignAssistant {
           return;
         }
 
-        // Find the close button using ApplicationV2 data-action attribute (like popout module)
+        // Find the close button using ApplicationV2 data-action attribute
         let closeButton = header.querySelector('[data-action="close"]');
 
         // Fallback: try finding by class
@@ -236,22 +351,22 @@ class DragonbaneCampaignAssistant {
           return;
         }
 
-        // Create our button using native DOM (matching popout module style exactly)
+        // Create our button using native DOM
         const headerButton = document.createElement("button");
         headerButton.classList.add(
           "header-control",
           "icon",
-          "session-advancement-control"
+          "session-advancement-control",
         );
         headerButton.type = "button";
         headerButton.innerHTML = '<i class="fas fa-circle-arrow-up"></i>';
         headerButton.setAttribute(
           "data-tooltip",
-          Utils.localize("CAMPAIGN_ASSISTANT.buttons.sessionAdvancement")
+          Utils.localize("CAMPAIGN_ASSISTANT.buttons.sessionAdvancement"),
         );
         headerButton.setAttribute(
           "aria-label",
-          Utils.localize("CAMPAIGN_ASSISTANT.buttons.sessionAdvancement")
+          Utils.localize("CAMPAIGN_ASSISTANT.buttons.sessionAdvancement"),
         );
 
         // Add click handler
@@ -260,7 +375,7 @@ class DragonbaneCampaignAssistant {
           new SessionAdvancementDialog(actor).render(true);
         });
 
-        // Insert BEFORE close button (exactly like popout module does)
+        // Insert BEFORE close button
         closeButton.parentNode.insertBefore(headerButton, closeButton);
       }, 100); // Wait for DOM to be fully rendered
     });

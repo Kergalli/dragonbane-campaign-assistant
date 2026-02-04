@@ -4,6 +4,16 @@ All notable changes to the Dragonbane Campaign Assistant module will be document
 
 ---
 
+## [1.2.0] - 2025-02-04
+
+### Enhanced
+
+- **Journal Recording System** - Complete visual overhaul with improved formatting
+  - Blockquote-style sections matching Dragonbane parchment aesthetic
+  - Enhanced data capture including weakness at session start and comprehensive marks breakdown
+
+---
+
 ## [1.1.0] - 2025-01-05
 
 ### ✨ Added - Major Features

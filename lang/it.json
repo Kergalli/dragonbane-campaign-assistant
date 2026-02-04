@@ -55,41 +55,41 @@
       "defeated": "Hai sconfitto uno o più nemici pericolosi?",
       "overcame": "Hai superato un ostacolo senza usare la forza?",
       "weaknessQuestion": "Come ti sei rapportato alla tua debolezza?",
-      "weaknessNone": "Non hai ceduto né interagito con la debolezza",
-      "weaknessGaveIn": "Hai ceduto alla tua debolezza",
-      "weaknessOvercame": "Hai agito contro la tua debolezza"
+      "weaknessNone": "Non mi sono rapportato alla debolezza",
+      "weaknessGaveIn": "Ho ceduto alla mia debolezza",
+      "weaknessOvercame": "Ho agito contro la mia debolezza"
     },
 
     "steps": {
       "questions": "Domande",
       "select": "Seleziona Abilità",
-      "roll": "Pronto per i Tiri"
+      "roll": "Pronto a Tirare"
     },
 
     "instructions": {
-      "questions": "Rispondi alle domande qui sotto. Ogni 'sì' ti concede un marchio di avanzamento da usare.",
-      "selectMore": "Clicca sulle abilità per selezionarle e marchiarle. Hai ancora marchi disponibili.",
-      "readyToMark": "Clicca 'Applica Marchi alle Abilità Selezionate' quando sei pronto a procedere.",
-      "readyToRoll": "Clicca 'Tira Tutti i Tiri di Avanzamento' per tirare per tutte le abilità marchiate.",
-      "readyToRollIndividual": "Clicca sulle abilità per tirarle individualmente. Quando tutte sono state tirate, clicca Completa Sessione per finire.",
-      "allSkillsRolled": "Tutte le abilità tirate! Clicca Completa Sessione per finire e registrare i risultati.",
-      "advancementRule": "Se il tiro supera il tuo attuale livello di abilità, l'abilità aumenta di uno, fino a un massimo di 18.",
-      "noMarksToUse": "Nessun marchio di avanzamento disponibile. Clicca 'Avanti' per procedere ai tiri.",
-      "noSkills": "Nessuna abilità disponibile da marcare. Rispondi prima alle domande per ottenere marchi, oppure torna alla scheda del personaggio per cancellare alcuni marchi esistenti.",
-      "noMarkedSkills": "Nessuna abilità è attualmente marchiata per l'avanzamento. Usa il passaggio 'Seleziona Abilità' per marcarne alcune, oppure marchiale dalla scheda del personaggio."
+      "questions": "Rispondi alle domande qui sotto. Ogni 'sì' ti dà un marchio di avanzamento da utilizzare.",
+      "selectMore": "Clicca sulle abilità per selezionarle per il marchio. Hai marchi rimanenti.",
+      "readyToMark": "Clicca su 'Marca Abilità Selezionate' quando sei pronto a procedere.",
+      "readyToRoll": "Clicca su 'Tira Tutto l'Avanzamento' per tirare per tutte le abilità marcate.",
+      "readyToRollIndividual": "Clicca sulle abilità per tirarle individualmente. Quando tutte sono tirate, clicca su Completa Sessione per finire.",
+      "allSkillsRolled": "Tutte le abilità tirate! Clicca su Completa Sessione per finire e registrare i risultati.",
+      "advancementRule": "Se il tiro supera il tuo livello di abilità corrente, l'abilità aumenta di uno, fino a un massimo di 18.",
+      "noMarksToUse": "Nessun marchio di avanzamento disponibile. Clicca su 'Avanti' per procedere al tiro.",
+      "noSkills": "Nessuna abilità disponibile da marcare. Rispondi prima alle domande per guadagnare marchi, o torna alla tua scheda personaggio per cancellare alcuni marchi esistenti.",
+      "noMarkedSkills": "Nessuna abilità è attualmente marcata per l'avanzamento. Usa il passo 'Seleziona Abilità' per marcarne alcune, o marcale sulla tua scheda personaggio."
     },
 
     "labels": {
       "marksAvailable": "Marchi di Avanzamento Disponibili",
-      "marksEarned": "Marchi di Avanzamento Ottenuti",
+      "marksEarned": "Marchi di Avanzamento Guadagnati",
       "level": "Livello",
       "yourWeakness": "La Tua Debolezza"
     },
 
     "buttons": {
       "sessionAdvancement": "Avanzamento di Sessione",
-      "markSelected": "Applica Marchi alle Abilità Selezionate",
-      "rollAdvancement": "Tira Tutti i Tiri di Avanzamento",
+      "markSelected": "Marca Abilità Selezionate",
+      "rollAdvancement": "Tira Tutto l'Avanzamento",
       "completeSession": "Completa Sessione",
       "next": "Avanti",
       "cancel": "Annulla"
@@ -98,53 +98,76 @@
     "dialog": {
       "confirmRoll": {
         "title": "Conferma Tiri di Avanzamento",
-        "content": "Eseguire i tiri di avanzamento per {count} abilità marcate?",
+        "content": "Tirare avanzamento per {count} abilità marcate?",
         "yes": "Tira Tutto",
         "no": "Annulla"
       },
       "confirmComplete": {
         "title": "Completa Sessione",
-        "content": "Finalizzare l'avanzamento di sessione? Questo registrerà tutti i tiri nel diario e chiuderà la finestra.",
-        "yes": "Completa e Registra",
+        "content": "Finalizzare l'avanzamento di sessione? Questo registrerà tutti i tiri nel diario e chiuderà la finestra di dialogo.",
+        "yes": "Completa & Registra",
         "no": "Annulla"
       },
       "confirmCancel": {
         "title": "Annulla Avanzamento",
-        "content": "Questo ripristinerà tutte le abilità tirate e rimuoverà i marchi aggiunti in questa sessione. Sei sicuro?",
+        "content": "Questo ripristinerà tutte le abilità tirate e rimuoverà i marchi aggiunti questa sessione. Sei sicuro?",
         "yes": "Ripristina Tutto",
-        "no": "Continua"
+        "no": "Continua a Lavorare"
       },
       "removeWeakness": {
         "title": "Rimuovi Debolezza",
-        "content": "Hai superato la tua debolezza! Rimuoverla dalla scheda del personaggio? Devi giocare una sessione completa senza una debolezza, poi potrai sceglierne una nuova.",
+        "content": "Hai superato la tua debolezza! Rimuoverla dalla tua scheda personaggio? Devi giocare una sessione completa senza debolezza, poi potrai sceglierne una nuova.",
         "yes": "Rimuovi Debolezza",
-        "cancel": "Annulla"
+        "cancel": "Mantieni Debolezza"
       }
+    },
+
+    "warnings": {
+      "noMoreMarks": "Hai usato tutti i marchi di avanzamento disponibili.",
+      "noSkillsSelected": "Seleziona almeno un'abilità da marcare.",
+      "noMarkedSkills": "Nessuna abilità è marcata per l'avanzamento."
+    },
+
+    "notifications": {
+      "skillMaxed": "{skill} ha raggiunto il livello massimo (18)! {actor} può scegliere un'abilità eroica.",
+      "weaknessRemoved": "Debolezza rimossa dalla scheda personaggio."
     },
 
     "chat": {
       "sessionSummary": {
-        "title": "Avanzamento di Sessione - {actor}",
+        "title": "Avanzamento di Sessione: {actor}",
         "marksUsed": "Marchi di avanzamento usati: {count}",
-        "skillsAdvanced": "Abilità migliorate: {count}",
-        "heroicAbilitiesGained": "Capacità Eroiche ottenute: {count}",
-        "maxSkillLevel": "Livello Massimo di Abilità"
+        "skillsAdvanced": "Abilità avanzate: {count}",
+        "heroicAbilitiesGained": "Abilità eroiche ottenute: {count}",
+        "maxSkillLevel": "Livello Max 18"
       }
     },
 
-    "notifications": {
-      "weaknessRemoved": "Debolezza rimossa dalla scheda del personaggio. Ricorda di giocare una sessione completa prima di sceglierne una nuova!",
-      "skillMaxed": "{skill} ha raggiunto il livello massimo di 18 per {actor}! 🎉"
-    },
-
-    "warnings": {
-      "noMoreMarks": "Nessun altro marchio di avanzamento disponibile",
-      "noMarkedSkills": "Nessuna abilità marcata per l'avanzamento",
-      "noSkillsSelected": "Seleziona almeno un'abilità da marcare"
+    "journal": {
+      "advancementQuestions": "Domande di Avanzamento",
+      "weakness": "Debolezza",
+      "currentWeakness": "Debolezza attuale:",
+      "gaveInToWeakness": "Ceduto alla debolezza:",
+      "gaveInDescription": "Il personaggio ha agito secondo la sua debolezza e ha guadagnato un marchio di avanzamento.",
+      "overcameWeakness": "Superato la debolezza:",
+      "overcameDescription": "Il personaggio ha agito contro la sua debolezza e ha guadagnato due marchi di avanzamento.",
+      "advancementMarks": "Marchi di Avanzamento",
+      "totalMarks": "Marchi totali:",
+      "fromQuestions": "Dalle domande:",
+      "fromAutoMarks": "Dai marchi automatici (tiri Drago/Demone):",
+      "results": "Risultati",
+      "skillsAdvanced": "Abilità avanzate:",
+      "of": "di",
+      "maxLevelHeroic": "(Livello Max 18 - Abilità Eroica!)",
+      "skillsNotAdvanced": "Abilità che non sono avanzate:",
+      "remainedAt": "Rimasto a",
+      "heroicAbilityGained": "1 Abilità Eroica ottenuta:",
+      "heroicAbilitiesGained": "{count} Abilità Eroiche ottenute:",
+      "heroicDescription": "Il personaggio ha padroneggiato abilità fino al livello 18 e può scegliere abilità eroiche."
     },
 
     "errors": {
-      "socketlibRequired": "Campaign Assistant richiede il modulo socketlib"
+      "socketlibRequired": "Dragonbane Campaign Assistant richiede che il modulo socketlib sia installato e attivo."
     }
   }
 }

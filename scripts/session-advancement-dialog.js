@@ -40,6 +40,9 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     this.rolledSkills = new Set(); // Track which skills have been rolled
     this.rollResults = []; // Store roll results for journal/summary
     this.skillsToRoll = new Set(); // Track which skills need rolling (set at start of Step 3)
+
+    // ENHANCED: Capture weakness at dialog open for tracking changes
+    this.weaknessAtStart = this.actor.system?.weakness || "";
   }
 
   static DEFAULT_OPTIONS = {
@@ -755,23 +758,68 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   }
 
   /**
-   * Record session to journal (via socket for GM)
+   * ENHANCED: Record session to journal (via socket for GM)
    */
   async _recordToJournal(results) {
-    // Always record to journal - no separate setting needed
-    // Use socketlib socket to have GM create/update journal
     const socket = game.modules.get(MODULE_ID).socket;
     if (!socket) {
       console.error("Socket not available for journal recording");
       return;
     }
 
-    // Call the registered socket event with the correct parameters
+    // Build comprehensive session data
+    const sessionData = {
+      actorId: this.actor.id,
+      actorName: this.actor.name,
+      timestamp: new Date().toISOString(),
+
+      // Advancement results
+      results: results,
+
+      // Question answers
+      questions: {
+        participated: this.questionAnswers.participated,
+        explored: this.questionAnswers.explored,
+        defeated: this.questionAnswers.defeated,
+        overcame: this.questionAnswers.overcame,
+        weakness: this.questionAnswers.weakness, // 'none', 'gavein', or 'overcame'
+      },
+
+      // Custom questions
+      customQuestions: this.customQuestionAnswers,
+
+      // Weakness information
+      weakness: {
+        text: this.weaknessAtStart, // The actual weakness text
+        choice: this.questionAnswers.weakness, // What they chose
+      },
+
+      // Marks breakdown
+      marks: {
+        fromQuestions: this.additionalMarks,
+        fromAutoMarks: results.length - this.additionalMarks,
+        total: results.length,
+      },
+
+      // Skills selected in Step 2 (newly marked this session)
+      skillsMarkedThisSession: Array.from(this.selectedSkills)
+        .map((skillId) => {
+          const skill = this.actor.items.get(skillId);
+          return skill
+            ? {
+                id: skill.id,
+                name: skill.name,
+                level: skill.system.value,
+              }
+            : null;
+        })
+        .filter((s) => s !== null),
+    };
+
+    // Call the enhanced socket event
     await socket.executeForEveryone(
       SOCKET_EVENTS.RECORD_ADVANCEMENT,
-      this.actor.id,
-      this.actor.name,
-      results
+      sessionData
     );
   }
 }

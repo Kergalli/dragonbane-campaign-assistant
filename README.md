@@ -1,6 +1,6 @@
 # Dragonbane Campaign Assistant
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.0-blue)
 ![Foundry Version](https://img.shields.io/badge/foundry-v13-green)
 ![System](https://img.shields.io/badge/system-dragonbane-orange)
 
@@ -57,7 +57,7 @@ Both modes include:
 **Automatic GM Journals:**
 
 - **One journal per character** - Organized in "Advancement History" folder
-- **Session summaries** - Date, marks used, skills advanced, number of heroic abilities gained
+- **Session summaries** - Date, questions answered, weakness engagement, marks used, skills advanced, number of heroic abilities gained
 - **Campaign-long tracking** - Complete advancement history for entire campaign
 - **Cross-client support** - Works when players trigger advancement, GM's client writes to journal
 - **No permission setup** - Journals stay GM-owned, automatically managed

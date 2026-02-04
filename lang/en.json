@@ -118,33 +118,56 @@
         "title": "Remove Weakness",
         "content": "You have overcome your weakness! Remove it from your character sheet? You must play a full session without a weakness, then you may choose a new one.",
         "yes": "Remove Weakness",
-        "cancel": "Cancel"
+        "cancel": "Keep Weakness"
       }
+    },
+
+    "warnings": {
+      "noMoreMarks": "You have used all available advancement marks.",
+      "noSkillsSelected": "Select at least one skill to mark.",
+      "noMarkedSkills": "No skills are marked for advancement."
+    },
+
+    "notifications": {
+      "skillMaxed": "{skill} has reached maximum level (18)! {actor} may choose a heroic ability.",
+      "weaknessRemoved": "Weakness removed from character sheet."
     },
 
     "chat": {
       "sessionSummary": {
-        "title": "Session Advancement - {actor}",
+        "title": "Session Advancement: {actor}",
         "marksUsed": "Advancement marks used: {count}",
         "skillsAdvanced": "Skills advanced: {count}",
-        "heroicAbilitiesGained": "Heroic Abilities gained: {count}",
-        "maxSkillLevel": "Max Skill Level"
+        "heroicAbilitiesGained": "Heroic abilities gained: {count}",
+        "maxSkillLevel": "Max Level 18"
       }
     },
 
-    "notifications": {
-      "weaknessRemoved": "Weakness removed from character sheet. Remember to play a full session before choosing a new one!",
-      "skillMaxed": "{skill} has reached maximum level 18 for {actor}! 🎉"
-    },
-
-    "warnings": {
-      "noMoreMarks": "No more advancement marks available",
-      "noMarkedSkills": "No skills marked for advancement",
-      "noSkillsSelected": "Please select at least one skill to mark"
+    "journal": {
+      "advancementQuestions": "Advancement Questions",
+      "weakness": "Weakness",
+      "currentWeakness": "Current Weakness:",
+      "gaveInToWeakness": "Gave in to weakness:",
+      "gaveInDescription": "Character acted according to their weakness and gained an advancement mark.",
+      "overcameWeakness": "Overcame weakness:",
+      "overcameDescription": "Character acted against their weakness and gained two advancement marks.",
+      "advancementMarks": "Advancement Marks",
+      "totalMarks": "Total Marks:",
+      "fromQuestions": "From Questions:",
+      "fromAutoMarks": "From Auto-Marks (Dragon/Demon rolls):",
+      "results": "Results",
+      "skillsAdvanced": "Skills Advanced:",
+      "of": "of",
+      "maxLevelHeroic": "(Max Level 18 - Heroic Ability!)",
+      "skillsNotAdvanced": "Skills That Did Not Advance:",
+      "remainedAt": "Remained at",
+      "heroicAbilityGained": "1 Heroic Ability Gained:",
+      "heroicAbilitiesGained": "{count} Heroic Abilities Gained:",
+      "heroicDescription": "The character has mastered skills to level 18 and may choose heroic abilities."
     },
 
     "errors": {
-      "socketlibRequired": "Campaign Assistant requires the socketlib module"
+      "socketlibRequired": "Dragonbane Campaign Assistant requires the socketlib module to be installed and active."
     }
   }
 }
