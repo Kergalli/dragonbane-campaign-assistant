@@ -30,6 +30,7 @@ This major release brings the Campaign Assistant to Foundry V14 and the Dragonba
 - **Edit-Safe Journal Entries**: Advancement journal entries now retain their formatting after being edited and saved through Foundry's text editor
   - **Impact**: Previously, opening an auto-generated entry in the editor and saving it caused the rich-text editor to re-flow the content — bullet spacing expanded and list text lost its styling. Entries now render consistently whether freshly generated or hand-edited
 - **Cleaner Generated Markup**: Removed inline styles and redundant whitespace from generated journal HTML, deferring to the Dragonbane system's native journal styling for a more consistent parchment look
+- **Note on Existing Entries**: This fix applies to newly generated entries. Advancement entries created before v2.0.0 retain their original formatting and may still re-flow if edited and saved
 
 ### 📋 Breaking Changes
 
