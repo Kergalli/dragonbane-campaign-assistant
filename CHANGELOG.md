@@ -2,6 +2,43 @@
 
 All notable changes to the Dragonbane Campaign Assistant module will be documented in this file.
 
+## [2.0.0] - 2026-06-17
+
+### 🚀 Major Release - Foundry V14 & Dragonbane v4.x Compatibility
+
+This major release brings the Campaign Assistant to Foundry V14 and the Dragonbane system v4.0.1. This is a clean cut to V14 — v2.x targets Foundry V14 only. **Foundry v13 / Dragonbane v3.x users should stay on the v1.x release line.**
+
+### 🔧 Technical Improvements
+
+**Character Sheet Button**
+
+- **Header-Controls API**: The "Session Advancement" button is now contributed through Foundry V14's native header-controls hook (`getHeaderControlsDoDCharacterSheet`) instead of manual DOM injection
+  - **Impact**: The button now renders correctly in popped-out character sheets, a new V14 feature
+  - **Impact**: Removed the timing-dependent DOM insertion and duplicate-guard logic, eliminating a class of render-timing bugs
+- **Live Toggle**: The "Add buttons to character sheets" setting now applies immediately to open sheets — no world reload required
+
+**Dragonbane v4 Alignment**
+
+- **Weakness Field**: Weakness reads and removal now target the canonical `system.weakness` field on the v4 character data model, removing a dead fallback path that could silently fail
+
+**Template Modernization**
+
+- **Inline Handlers Removed**: Removed inline `onchange` attributes from the advancement-question and weakness inputs; the dialog's `submitOnChange` form handling now drives the live marks counter
+
+### 📋 Breaking Changes
+
+**Foundry V14 Required**
+
+- **Minimum Foundry**: Now requires Foundry V14 (verified `14.364`) and Dragonbane v4.x (verified `4.0.1`)
+  - **Impact**: Not compatible with Foundry V13 / Dragonbane v3.x — use the v1.x release line for that environment
+- **Compatibility Band**: `module.json` minimum/verified/maximum set to V14; Dragonbane system requirement raised to v4.0.0+
+
+### 🌍 Localization
+
+- **Fully Localized UI Strings**: Several previously hardcoded English strings are now translated across English, Swedish, and Italian — the Session Advancement window title, the weakness-rule mark labels (`(+1 mark)` / `(+2 marks, removes weakness)`), the "no skills advanced" chat result, and the advancement-cancelled notification
+- **Localized Journal Folder**: The journal folder that stores advancement history is now named in the GM's language rather than always English
+  - **Impact**: On existing non-English worlds, the original English-named "Advancement History" folder remains in place and a new localized folder is created going forward. Previously recorded journals are not moved. Single-language and English worlds are unaffected. To consolidate, manually move existing character journals into the new folder
+
 ---
 
 ## [1.2.0] - 2025-02-04

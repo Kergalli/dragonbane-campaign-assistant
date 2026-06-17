@@ -10,14 +10,17 @@ import { Utils } from "./utils.js";
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
 export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
-  ApplicationV2
+  ApplicationV2,
 ) {
   constructor(actor, options = {}) {
     super(options);
     this.actor = actor;
 
-    // Set dynamic title with character name
-    this.options.window.title = `Session Advancement: ${actor.name}`;
+    // Set dynamic title with character name (localized)
+    this.options.window.title = Utils.format(
+      "CAMPAIGN_ASSISTANT.window.title",
+      { actor: actor.name },
+    );
 
     this.questionAnswers = {
       participated: false,
@@ -33,7 +36,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     // Track which skills were already marked when dialog opened
     this.originalMarkedSkills = new Set(
-      Utils.getMarkedSkills(this.actor).map((s) => s.id)
+      Utils.getMarkedSkills(this.actor).map((s) => s.id),
     );
 
     // Individual mode state
@@ -120,8 +123,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     }
 
     // Get character's current weakness
-    const currentWeakness =
-      this.actor.system?.weakness || this.actor.system?.details?.weakness || "";
+    const currentWeakness = this.actor.system?.weakness || "";
 
     // Check if weakness rule is enabled
     const useWeaknessRule = Utils.getSetting("useWeaknessRule");
@@ -169,12 +171,12 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     // Count yes answers from default questions (only count non-hidden ones)
     const regularMarks = defaultQuestionConfigs.filter(
-      (q) => !q.hidden && this.questionAnswers[q.id]
+      (q) => !q.hidden && this.questionAnswers[q.id],
     ).length;
 
     // Count yes answers from custom questions
     const customMarks = Object.values(this.customQuestionAnswers).filter(
-      Boolean
+      Boolean,
     ).length;
 
     // Add weakness marks (0, 1, or 2) - only if rule is enabled
@@ -285,7 +287,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       // Check if we can add more
       if (this.selectedSkills.size >= this.additionalMarks) {
         ui.notifications.warn(
-          Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMoreMarks")
+          Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMoreMarks"),
         );
         return;
       }
@@ -362,7 +364,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
           Utils.format("CAMPAIGN_ASSISTANT.notifications.skillMaxed", {
             skill: skill.name,
             actor: this.actor.name,
-          })
+          }),
         );
       }
     } else {
@@ -419,7 +421,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     if (markedSkills.length === 0) {
       ui.notifications.warn(
-        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMarkedSkills")
+        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMarkedSkills"),
       );
       return;
     }
@@ -472,11 +474,11 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: {
         title: Utils.localize(
-          "CAMPAIGN_ASSISTANT.dialog.confirmComplete.title"
+          "CAMPAIGN_ASSISTANT.dialog.confirmComplete.title",
         ),
       },
       content: Utils.localize(
-        "CAMPAIGN_ASSISTANT.dialog.confirmComplete.content"
+        "CAMPAIGN_ASSISTANT.dialog.confirmComplete.content",
       ),
       yes: {
         label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmComplete.yes"),
@@ -509,7 +511,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     if (this.selectedSkills.size === 0) {
       ui.notifications.warn(
-        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noSkillsSelected")
+        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noSkillsSelected"),
       );
       return;
     }
@@ -563,33 +565,29 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       const confirmed = await foundry.applications.api.DialogV2.confirm({
         window: {
           title: Utils.localize(
-            "CAMPAIGN_ASSISTANT.dialog.removeWeakness.title"
+            "CAMPAIGN_ASSISTANT.dialog.removeWeakness.title",
           ),
         },
         content: Utils.localize(
-          "CAMPAIGN_ASSISTANT.dialog.removeWeakness.content"
+          "CAMPAIGN_ASSISTANT.dialog.removeWeakness.content",
         ),
         yes: {
           label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.removeWeakness.yes"),
         },
         no: {
           label: Utils.localize(
-            "CAMPAIGN_ASSISTANT.dialog.removeWeakness.cancel"
+            "CAMPAIGN_ASSISTANT.dialog.removeWeakness.cancel",
           ),
         },
       });
 
       if (confirmed) {
-        // User clicked "Remove Weakness" - remove it and proceed
-        // Try to remove weakness - try both possible locations
-        if (this.actor.system.weakness !== undefined) {
-          await this.actor.update({ "system.weakness": "" });
-        } else if (this.actor.system.details?.weakness !== undefined) {
-          await this.actor.update({ "system.details.weakness": "" });
-        }
+        // User clicked "Remove Weakness" - clear it and proceed.
+        // system.weakness is the canonical field on the 4.0 character model.
+        await this.actor.update({ "system.weakness": "" });
 
         ui.notifications.info(
-          Utils.localize("CAMPAIGN_ASSISTANT.notifications.weaknessRemoved")
+          Utils.localize("CAMPAIGN_ASSISTANT.notifications.weaknessRemoved"),
         );
       } else {
         // User clicked "Cancel" - reset weakness to 'none' and stay on step 1
@@ -625,11 +623,11 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       const confirmed = await foundry.applications.api.DialogV2.confirm({
         window: {
           title: Utils.localize(
-            "CAMPAIGN_ASSISTANT.dialog.confirmCancel.title"
+            "CAMPAIGN_ASSISTANT.dialog.confirmCancel.title",
           ),
         },
         content: Utils.localize(
-          "CAMPAIGN_ASSISTANT.dialog.confirmCancel.content"
+          "CAMPAIGN_ASSISTANT.dialog.confirmCancel.content",
         ),
         yes: {
           label: Utils.localize("CAMPAIGN_ASSISTANT.dialog.confirmCancel.yes"),
@@ -650,13 +648,15 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
             skill.update({
               "system.value": result.oldLevel,
               "system.advance": true,
-            })
+            }),
           );
         }
       }
 
       await Promise.all(updates);
-      ui.notifications.info("Advancement cancelled - skills reverted");
+      ui.notifications.info(
+        Utils.localize("CAMPAIGN_ASSISTANT.notifications.advancementCancelled"),
+      );
     }
 
     // If in Step 2 or Step 3, unmark skills that were marked this session
@@ -713,7 +713,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       .map((r) => {
         const maxLabel = r.reachedMaximum
           ? ` <strong>(${Utils.localize(
-              "CAMPAIGN_ASSISTANT.chat.sessionSummary.maxSkillLevel"
+              "CAMPAIGN_ASSISTANT.chat.sessionSummary.maxSkillLevel",
             )})</strong>`
           : "";
         return `<li>${r.skill} (${r.oldLevel} → ${r.newLevel})${maxLabel}</li>`;
@@ -724,7 +724,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       heroicAbilitiesCount > 0
         ? `<p><strong>${Utils.format(
             "CAMPAIGN_ASSISTANT.chat.sessionSummary.heroicAbilitiesGained",
-            { count: heroicAbilitiesCount }
+            { count: heroicAbilitiesCount },
           )}</strong></p>`
         : "";
 
@@ -735,17 +735,19 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
         })}</h3>
         <p><strong>${Utils.format(
           "CAMPAIGN_ASSISTANT.chat.sessionSummary.marksUsed",
-          { count: results.length }
+          { count: results.length },
         )}</strong></p>
         <p><strong>${Utils.format(
           "CAMPAIGN_ASSISTANT.chat.sessionSummary.skillsAdvanced",
-          { count: successCount }
+          { count: successCount },
         )}</strong></p>
         ${heroicAbilitiesLine}
         ${
           successCount > 0
             ? `<ul>${successList}</ul>`
-            : `<p><em>No skills advanced this session.</em></p>`
+            : `<p><em>${Utils.localize(
+                "CAMPAIGN_ASSISTANT.chat.sessionSummary.noneAdvanced",
+              )}</em></p>`
         }
       </div>
     `;
@@ -819,7 +821,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     // Call the enhanced socket event
     await socket.executeForEveryone(
       SOCKET_EVENTS.RECORD_ADVANCEMENT,
-      sessionData
+      sessionData,
     );
   }
 }

@@ -55,12 +55,10 @@ class DragonbaneCampaignAssistant {
     // Setup socket
     this.setupSocket();
 
-    // Add actor sheet buttons if enabled
-    const addButtons = Utils.getSetting(SETTINGS.ADD_ACTOR_BUTTONS);
-
-    if (addButtons) {
-      this.setupActorSheetButtons();
-    }
+    // Register the header control hook once. It self-checks the
+    // ADD_ACTOR_BUTTONS setting at render time, so toggling the
+    // setting takes effect without a reload.
+    this.setupActorSheetButtons();
 
     Utils.debugLog("Main", "Ready");
   }
@@ -115,13 +113,14 @@ class DragonbaneCampaignAssistant {
     } = sessionData;
 
     // Find or create "Advancement History" folder
+    const folderName = Utils.localize("CAMPAIGN_ASSISTANT.journal.folderName");
     let folder = game.folders.find(
-      (f) => f.name === "Advancement History" && f.type === "JournalEntry",
+      (f) => f.name === folderName && f.type === "JournalEntry",
     );
 
     if (!folder) {
       folder = await Folder.create({
-        name: "Advancement History",
+        name: folderName,
         type: "JournalEntry",
         parent: null,
       });
@@ -152,7 +151,7 @@ class DragonbaneCampaignAssistant {
     const heroicAbilitiesCount = results.filter((r) => r.reachedMaximum).length;
 
     // Build the journal entry
-    let entryHTML = `<h1>${formattedDate}</h1>\n<p></p>\n`;
+    let entryHTML = `<h1>${formattedDate}</h1>`;
 
     // === SECTION 1: ADVANCEMENT QUESTIONS ===
     const questionLabels = {
@@ -190,12 +189,10 @@ class DragonbaneCampaignAssistant {
     }
 
     if (questionsAnswered.length > 0) {
-      entryHTML += `<blockquote class="info">\n`;
-      entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.advancementQuestions")}</h3>\n`;
-      entryHTML += `    <ul style="margin-top:25px;font-style:normal;margin-right:20px">\n`;
-      entryHTML += `        ${questionsAnswered.join("\n        ")}\n`;
-      entryHTML += `    </ul>\n`;
-      entryHTML += `</blockquote>\n`;
+      entryHTML += `<blockquote class="info">`;
+      entryHTML += `<h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.advancementQuestions")}</h3>`;
+      entryHTML += `<ul>${questionsAnswered.join("")}</ul>`;
+      entryHTML += `</blockquote>`;
     }
 
     // === SECTION 2: WEAKNESS ===
@@ -203,57 +200,56 @@ class DragonbaneCampaignAssistant {
       // Strip HTML tags from weakness text
       const cleanWeakness = weakness.text.replace(/<[^>]*>/g, "").trim();
 
-      entryHTML += `<blockquote class="info">\n`;
-      entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.weakness")}</h3>\n`;
-      entryHTML += `    <ul style="margin-top:25px;font-style:normal;margin-right:20px">\n`;
-      entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.currentWeakness")}</strong> ${cleanWeakness}</li>\n`;
+      let weaknessItems = `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.currentWeakness")}</strong> ${cleanWeakness}</li>`;
 
       if (questions.weakness === "gavein") {
-        entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.gaveInToWeakness")}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.gaveInDescription")}</li>\n`;
+        weaknessItems += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.gaveInToWeakness")}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.gaveInDescription")}</li>`;
       } else if (questions.weakness === "overcame") {
-        entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.overcameWeakness")}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.overcameDescription")}</li>\n`;
+        weaknessItems += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.overcameWeakness")}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.overcameDescription")}</li>`;
       }
 
-      entryHTML += `    </ul>\n`;
-      entryHTML += `</blockquote>\n`;
+      entryHTML += `<blockquote class="info">`;
+      entryHTML += `<h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.weakness")}</h3>`;
+      entryHTML += `<ul>${weaknessItems}</ul>`;
+      entryHTML += `</blockquote>`;
     }
 
     // === SECTION 3: ADVANCEMENT MARKS ===
-    entryHTML += `<blockquote class="info">\n`;
-    entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.advancementMarks")}</h3>\n`;
-    entryHTML += `    <ul style="margin-top:25px;font-style:normal;margin-right:20px">\n`;
-    entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.totalMarks")}</strong> ${marks.total}</li>\n`;
-    entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromQuestions")}</strong> ${marks.fromQuestions}</li>\n`;
-    entryHTML += `        <li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromAutoMarks")}</strong> ${marks.fromAutoMarks}</li>\n`;
-    entryHTML += `    </ul>\n`;
-    entryHTML += `</blockquote>\n`;
+    entryHTML += `<blockquote class="info">`;
+    entryHTML += `<h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.advancementMarks")}</h3>`;
+    entryHTML += `<ul>`;
+    entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.totalMarks")}</strong> ${marks.total}</li>`;
+    entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromQuestions")}</strong> ${marks.fromQuestions}</li>`;
+    entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromAutoMarks")}</strong> ${marks.fromAutoMarks}</li>`;
+    entryHTML += `</ul>`;
+    entryHTML += `</blockquote>`;
 
     // === SECTION 4: RESULTS ===
-    entryHTML += `<blockquote class="info">\n`;
-    entryHTML += `    <h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.results")}</h3>\n`;
-    entryHTML += `    <p style="margin-right:20px"><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.skillsAdvanced")}</strong> ${successCount} ${Utils.localize("CAMPAIGN_ASSISTANT.journal.of")} ${results.length}</p>\n`;
+    entryHTML += `<blockquote class="info">`;
+    entryHTML += `<h3>${Utils.localize("CAMPAIGN_ASSISTANT.journal.results")}</h3>`;
+    entryHTML += `<p><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.skillsAdvanced")}</strong> ${successCount} ${Utils.localize("CAMPAIGN_ASSISTANT.journal.of")} ${results.length}</p>`;
 
     // Skills that advanced
     if (successCount > 0) {
-      entryHTML += `    <ul style="font-style:normal;margin-right:20px">\n`;
+      entryHTML += `<ul>`;
       for (const r of results.filter((r) => r.success)) {
         const maxLabel = r.reachedMaximum
           ? ` <strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.maxLevelHeroic")}</strong>`
           : "";
-        entryHTML += `        <li><strong>${r.skill}</strong>: ${r.oldLevel} → <strong>${r.newLevel}</strong>${maxLabel}</li>\n`;
+        entryHTML += `<li><strong>${r.skill}</strong>: ${r.oldLevel} → <strong>${r.newLevel}</strong>${maxLabel}</li>`;
       }
-      entryHTML += `    </ul>\n`;
+      entryHTML += `</ul>`;
     }
 
     // Skills that did not advance
     const failedResults = results.filter((r) => !r.success);
     if (failedResults.length > 0) {
-      entryHTML += `    <p style="margin-right:20px"><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.skillsNotAdvanced")}</strong></p>\n`;
-      entryHTML += `    <ul style="font-style:normal;margin-right:20px">\n`;
+      entryHTML += `<p><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.skillsNotAdvanced")}</strong></p>`;
+      entryHTML += `<ul>`;
       for (const r of failedResults) {
-        entryHTML += `        <li><strong>${r.skill}</strong>: ${Utils.localize("CAMPAIGN_ASSISTANT.journal.remainedAt")} ${r.oldLevel}</li>\n`;
+        entryHTML += `<li><strong>${r.skill}</strong>: ${Utils.localize("CAMPAIGN_ASSISTANT.journal.remainedAt")} ${r.oldLevel}</li>`;
       }
-      entryHTML += `    </ul>\n`;
+      entryHTML += `    </ul>`;
     }
 
     // Heroic abilities summary
@@ -264,10 +260,10 @@ class DragonbaneCampaignAssistant {
           : Utils.format("CAMPAIGN_ASSISTANT.journal.heroicAbilitiesGained", {
               count: heroicAbilitiesCount,
             });
-      entryHTML += `    <p style="margin-right:20px"><strong>${heroicLabel}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.heroicDescription")}</p>\n`;
+      entryHTML += `<p><strong>${heroicLabel}</strong> ${Utils.localize("CAMPAIGN_ASSISTANT.journal.heroicDescription")}</p>`;
     }
 
-    entryHTML += `</blockquote>\n`;
+    entryHTML += `</blockquote>`;
 
     // Update or create the journal page
     const pages = journal.pages.contents;
@@ -306,78 +302,28 @@ class DragonbaneCampaignAssistant {
    * Add buttons to character sheets
    */
   static setupActorSheetButtons() {
-    // ApplicationV2 uses class-specific hooks: renderDoDCharacterSheet
-    Hooks.on("renderDoDCharacterSheet", (sheet, html, data) => {
+    // ApplicationV2 header-controls API. The system's character sheet
+    // (DoDCharacterSheet) exposes the per-class hook
+    // "getHeaderControlsDoDCharacterSheet". Returning a control entry here
+    // lets Foundry render and position the button natively — which means it
+    // travels correctly with pop-out windows and needs no DOM surgery.
+    Hooks.on("getHeaderControlsDoDCharacterSheet", (sheet, controls) => {
       const actor = sheet.actor;
-      if (!actor) {
-        return;
-      }
+      if (!actor) return;
 
-      // Only add for player characters
-      if (!Utils.isPlayerCharacter(actor)) {
-        return;
-      }
+      // Respect the live setting (no reload needed — see settings.js onChange).
+      if (!Utils.getSetting(SETTINGS.ADD_ACTOR_BUTTONS)) return;
 
-      // Wait for DOM to be fully rendered
-      setTimeout(() => {
-        // Get the app element (native DOM, not jQuery)
-        const appElement =
-          sheet.element instanceof jQuery ? sheet.element[0] : sheet.element;
+      // Only player characters.
+      if (!Utils.isPlayerCharacter(actor)) return;
 
-        if (!appElement) {
-          return;
-        }
-
-        // Find the header first
-        const header = appElement.querySelector(".window-header");
-        if (!header) {
-          return;
-        }
-
-        // Check if button already exists (prevent duplicates on re-render)
-        if (header.querySelector(".session-advancement-control")) {
-          return;
-        }
-
-        // Find the close button using ApplicationV2 data-action attribute
-        let closeButton = header.querySelector('[data-action="close"]');
-
-        // Fallback: try finding by class
-        if (!closeButton) {
-          closeButton = header.querySelector(".header-button.close");
-        }
-
-        if (!closeButton) {
-          return;
-        }
-
-        // Create our button using native DOM
-        const headerButton = document.createElement("button");
-        headerButton.classList.add(
-          "header-control",
-          "icon",
-          "session-advancement-control",
-        );
-        headerButton.type = "button";
-        headerButton.innerHTML = '<i class="fas fa-circle-arrow-up"></i>';
-        headerButton.setAttribute(
-          "data-tooltip",
-          Utils.localize("CAMPAIGN_ASSISTANT.buttons.sessionAdvancement"),
-        );
-        headerButton.setAttribute(
-          "aria-label",
-          Utils.localize("CAMPAIGN_ASSISTANT.buttons.sessionAdvancement"),
-        );
-
-        // Add click handler
-        headerButton.addEventListener("click", (event) => {
-          event.preventDefault();
-          new SessionAdvancementDialog(actor).render(true);
-        });
-
-        // Insert BEFORE close button
-        closeButton.parentNode.insertBefore(headerButton, closeButton);
-      }, 100); // Wait for DOM to be fully rendered
+      controls.push({
+        icon: "fas fa-circle-arrow-up",
+        label: "CAMPAIGN_ASSISTANT.buttons.sessionAdvancement",
+        action: "openSessionAdvancement",
+        // Visible in the always-shown header bar rather than the overflow menu.
+        onClick: () => new SessionAdvancementDialog(actor).render(true),
+      });
     });
   }
 

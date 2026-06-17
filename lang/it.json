@@ -57,7 +57,9 @@
       "weaknessQuestion": "Come ti sei rapportato alla tua debolezza?",
       "weaknessNone": "Non mi sono rapportato alla debolezza",
       "weaknessGaveIn": "Ho ceduto alla mia debolezza",
-      "weaknessOvercame": "Ho agito contro la mia debolezza"
+      "weaknessOvercame": "Ho agito contro la mia debolezza",
+      "weaknessGaveInMarks": "(+1 marchio)",
+      "weaknessOvercameMarks": "(+2 marchi, rimuove la debolezza)"
     },
 
     "steps": {
@@ -84,6 +86,10 @@
       "marksEarned": "Marchi di Avanzamento Guadagnati",
       "level": "Livello",
       "yourWeakness": "La Tua Debolezza"
+    },
+
+    "window": {
+      "title": "Avanzamento di Sessione: {actor}"
     },
 
     "buttons": {
@@ -130,7 +136,8 @@
 
     "notifications": {
       "skillMaxed": "{skill} ha raggiunto il livello massimo (18)! {actor} può scegliere un'abilità eroica.",
-      "weaknessRemoved": "Debolezza rimossa dalla scheda personaggio."
+      "weaknessRemoved": "Debolezza rimossa dalla scheda personaggio.",
+      "advancementCancelled": "Avanzamento annullato - abilità ripristinate."
     },
 
     "chat": {
@@ -139,11 +146,13 @@
         "marksUsed": "Marchi di avanzamento usati: {count}",
         "skillsAdvanced": "Abilità avanzate: {count}",
         "heroicAbilitiesGained": "Abilità eroiche ottenute: {count}",
-        "maxSkillLevel": "Livello Max 18"
+        "maxSkillLevel": "Livello Max 18",
+        "noneAdvanced": "Nessuna abilità è avanzata questa sessione."
       }
     },
 
     "journal": {
+      "folderName": "Cronologia Avanzamenti",
       "advancementQuestions": "Domande di Avanzamento",
       "weakness": "Debolezza",
       "currentWeakness": "Debolezza attuale:",

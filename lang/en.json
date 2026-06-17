@@ -57,7 +57,9 @@
       "weaknessQuestion": "How did you engage with your weakness?",
       "weaknessNone": "Did not engage with weakness",
       "weaknessGaveIn": "Gave in to your weakness",
-      "weaknessOvercame": "Acted against your weakness"
+      "weaknessOvercame": "Acted against your weakness",
+      "weaknessGaveInMarks": "(+1 mark)",
+      "weaknessOvercameMarks": "(+2 marks, removes weakness)"
     },
 
     "steps": {
@@ -84,6 +86,10 @@
       "marksEarned": "Advancement Marks Earned",
       "level": "Level",
       "yourWeakness": "Your Weakness"
+    },
+
+    "window": {
+      "title": "Session Advancement: {actor}"
     },
 
     "buttons": {
@@ -130,7 +136,8 @@
 
     "notifications": {
       "skillMaxed": "{skill} has reached maximum level (18)! {actor} may choose a heroic ability.",
-      "weaknessRemoved": "Weakness removed from character sheet."
+      "weaknessRemoved": "Weakness removed from character sheet.",
+      "advancementCancelled": "Advancement cancelled - skills reverted."
     },
 
     "chat": {
@@ -139,11 +146,13 @@
         "marksUsed": "Advancement marks used: {count}",
         "skillsAdvanced": "Skills advanced: {count}",
         "heroicAbilitiesGained": "Heroic abilities gained: {count}",
-        "maxSkillLevel": "Max Level 18"
+        "maxSkillLevel": "Max Level 18",
+        "noneAdvanced": "No skills advanced this session."
       }
     },
 
     "journal": {
+      "folderName": "Advancement History",
       "advancementQuestions": "Advancement Questions",
       "weakness": "Weakness",
       "currentWeakness": "Current Weakness:",

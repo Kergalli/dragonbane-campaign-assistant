@@ -57,7 +57,9 @@
       "weaknessQuestion": "Hur engagerade du dig med din svaghet?",
       "weaknessNone": "Engagerade mig inte med svaghet",
       "weaknessGaveIn": "Gav efter för din svaghet",
-      "weaknessOvercame": "Agerade mot din svaghet"
+      "weaknessOvercame": "Agerade mot din svaghet",
+      "weaknessGaveInMarks": "(+1 markering)",
+      "weaknessOvercameMarks": "(+2 markeringar, tar bort svaghet)"
     },
 
     "steps": {
@@ -84,6 +86,10 @@
       "marksEarned": "Utvecklingsmarkeringar intjänade",
       "level": "Nivå",
       "yourWeakness": "Din svaghet"
+    },
+
+    "window": {
+      "title": "Sessionsutveckling: {actor}"
     },
 
     "buttons": {
@@ -130,7 +136,8 @@
 
     "notifications": {
       "skillMaxed": "{skill} har nått maximal nivå (18)! {actor} kan välja en heroisk förmåga.",
-      "weaknessRemoved": "Svaghet borttagen från karaktärsblankett."
+      "weaknessRemoved": "Svaghet borttagen från karaktärsblankett.",
+      "advancementCancelled": "Utveckling avbruten - färdigheter återställda."
     },
 
     "chat": {
@@ -139,11 +146,13 @@
         "marksUsed": "Utvecklingsmarkeringar använda: {count}",
         "skillsAdvanced": "Färdigheter utvecklade: {count}",
         "heroicAbilitiesGained": "Heroiska förmågor erhållna: {count}",
-        "maxSkillLevel": "Max nivå 18"
+        "maxSkillLevel": "Max nivå 18",
+        "noneAdvanced": "Inga färdigheter utvecklades denna session."
       }
     },
 
     "journal": {
+      "folderName": "Utvecklingshistorik",
       "advancementQuestions": "Utvecklingsfrågor",
       "weakness": "Svaghet",
       "currentWeakness": "Nuvarande svaghet:",

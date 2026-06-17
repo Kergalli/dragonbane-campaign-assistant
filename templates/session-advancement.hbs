@@ -89,7 +89,6 @@
             name="question_{{id}}" 
             value="true"
             {{#if checked}}checked{{/if}}
-            onchange="this.form.requestSubmit()"
           />
           <span>{{label}}</span>
         </label>
@@ -108,7 +107,6 @@
                 name="question_weakness" 
                 value="none"
                 {{#if weaknessNoneChecked}}checked{{/if}}
-                onchange="this.form.requestSubmit()"
               />
               <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessNone"}}</span>
             </label>
@@ -119,9 +117,8 @@
                 name="question_weakness" 
                 value="gavein"
                 {{#if weaknessGaveInChecked}}checked{{/if}}
-                onchange="this.form.requestSubmit()"
               />
-              <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessGaveIn"}} <em>(+1 mark)</em></span>
+              <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessGaveIn"}} <em>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessGaveInMarks"}}</em></span>
             </label>
             
             <label class="weakness-option">
@@ -130,9 +127,8 @@
                 name="question_weakness" 
                 value="overcame"
                 {{#if weaknessOvercameChecked}}checked{{/if}}
-                onchange="this.form.requestSubmit()"
               />
-              <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessOvercame"}} <em>(+2 marks, removes weakness)</em></span>
+              <span>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessOvercame"}} <em>{{localize "CAMPAIGN_ASSISTANT.questions.weaknessOvercameMarks"}}</em></span>
             </label>
           </div>
           

@@ -1,7 +1,7 @@
 # Dragonbane Campaign Assistant
 
-![Version](https://img.shields.io/badge/version-1.2.0-blue)
-![Foundry Version](https://img.shields.io/badge/foundry-v13-green)
+![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Foundry Version](https://img.shields.io/badge/foundry-v14-green)
 ![System](https://img.shields.io/badge/system-dragonbane-orange)
 
 **Dragonbane Campaign Assistant** enhances campaign management and character progression for the Dragonbane RPG system by Free League Publishing.
@@ -152,15 +152,16 @@ Both modes include:
 
 ### **Required**
 
-| Requirement           | Version | Notes                                              |
-| --------------------- | ------- | -------------------------------------------------- |
-| **Foundry VTT**       | v13+    | Uses ApplicationV2 and modern dialog APIs          |
-| **Dragonbane System** | v2.6.0+ | Required for skill marking and advancement rolling |
-| **socketlib**         | Latest  | Required for cross-client journal writing          |
+| Requirement           | Version  | Notes                                                               |
+| --------------------- | -------- | ------------------------------------------------------------------- |
+| **Foundry VTT**       | v14 only | v14.364+ verified. For v13, use the v1.x line.                      |
+| **Dragonbane System** | v4.x     | v4.0.1 verified. Required for skill marking and advancement rolling |
+| **socketlib**         | Latest   | Required for cross-client journal writing                           |
 
 ### **Compatibility Notes**
 
-- **ApplicationV2**: Module uses Foundry v13's modern application framework
+- **Foundry v14 only**: This is a clean cut to v14 (verified `14.364`). There is no build spanning v13 and v14 — **Foundry v13 / Dragonbane v3.x users should stay on the v1.x release line.**
+- **ApplicationV2**: Module uses Foundry's modern application framework, including the v14 header-controls API for the character-sheet button
 - **Native Integration**: Works seamlessly with Dragonbane system's built-in advancement mechanics
 - **Dark Mode**: Fully compatible with Foundry VTT's dark mode interface
 
