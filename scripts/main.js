@@ -249,7 +249,7 @@ class DragonbaneCampaignAssistant {
       for (const r of failedResults) {
         entryHTML += `<li><strong>${r.skill}</strong>: ${Utils.localize("CAMPAIGN_ASSISTANT.journal.remainedAt")} ${r.oldLevel}</li>`;
       }
-      entryHTML += `    </ul>`;
+      entryHTML += `</ul>`;
     }
 
     // Heroic abilities summary

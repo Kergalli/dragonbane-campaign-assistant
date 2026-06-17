@@ -25,6 +25,12 @@ This major release brings the Campaign Assistant to Foundry V14 and the Dragonba
 
 - **Inline Handlers Removed**: Removed inline `onchange` attributes from the advancement-question and weakness inputs; the dialog's `submitOnChange` form handling now drives the live marks counter
 
+**Journal Formatting**
+
+- **Edit-Safe Journal Entries**: Advancement journal entries now retain their formatting after being edited and saved through Foundry's text editor
+  - **Impact**: Previously, opening an auto-generated entry in the editor and saving it caused the rich-text editor to re-flow the content — bullet spacing expanded and list text lost its styling. Entries now render consistently whether freshly generated or hand-edited
+- **Cleaner Generated Markup**: Removed inline styles and redundant whitespace from generated journal HTML, deferring to the Dragonbane system's native journal styling for a more consistent parchment look
+
 ### 📋 Breaking Changes
 
 **Foundry V14 Required**

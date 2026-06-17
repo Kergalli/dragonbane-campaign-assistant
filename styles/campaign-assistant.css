@@ -557,3 +557,20 @@
 .session-advancement .skill-item.already-rolled .fa-check-circle {
   color: #666;
 }
+
+/* ProseMirror wraps each <li>'s content in a <p> on save. The Dragonbane
+   system's blockquote.info <p> rule (font-size:13px; font-style:normal;
+   padding:4px 16px 0) then overrides the list-item styling, changing the
+   font and spacing of edited entries vs. freshly generated ones. Make the
+   list-item paragraph transparent to styling so edited entries match. */
+.system-dragonbane
+  .sheet.journal-entry
+  .journal-entry-content
+  blockquote.info
+  li
+  > p {
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-style: inherit;
+}
