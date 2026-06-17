@@ -7,7 +7,7 @@
       },
       "addActorButtons": {
         "name": "Lägg till knappar på karaktärsblad",
-        "hint": "Lägg till knapp för sessionsutveckling på karaktärsblad (kräver omladdning)"
+        "hint": "Lägg till knapp för sessionsutveckling på karaktärsblad"
       },
       "trackSessionHistory": {
         "name": "Spåra sessionshistorik",

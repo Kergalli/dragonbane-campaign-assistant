@@ -7,7 +7,7 @@
       },
       "addActorButtons": {
         "name": "Add Character Sheet Buttons",
-        "hint": "Add Session Advancement button to character sheets (requires reload)"
+        "hint": "Add Session Advancement button to character sheets"
       },
       "trackSessionHistory": {
         "name": "Track Session History",

@@ -279,7 +279,7 @@ class DragonbaneCampaignAssistant {
       // Create new page with title display turned off
       await JournalEntryPage.create(
         {
-          name: "Advancement History",
+          name: Utils.localize("CAMPAIGN_ASSISTANT.journal.folderName"),
           type: "text",
           title: {
             show: false,

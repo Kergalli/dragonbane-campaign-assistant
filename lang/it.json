@@ -7,7 +7,7 @@
       },
       "addActorButtons": {
         "name": "Aggiungi Pulsanti alla Scheda del Personaggio",
-        "hint": "Aggiunge il pulsante di Avanzamento di Sessione alle schede dei personaggi (richiede ricarica)"
+        "hint": "Aggiunge il pulsante di Avanzamento di Sessione alle schede dei personaggi"
       },
       "trackSessionHistory": {
         "name": "Traccia Cronologia delle Sessioni",
