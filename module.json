@@ -48,6 +48,11 @@
       "path": "lang/sv.json"
     },
     {
+      "lang": "pl",
+      "name": "Polish",
+      "path": "lang/pl.json"
+    },
+    {
       "lang": "it",
       "name": "Italiano",
       "path": "lang/it.json"
