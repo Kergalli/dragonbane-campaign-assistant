@@ -1,0 +1,181 @@
+{
+  "CAMPAIGN_ASSISTANT": {
+    "settings": {
+      "enabled": {
+        "name": "Enable Campaign Assistant",
+        "hint": "Master toggle for the Campaign Assistant module"
+      },
+      "addActorButtons": {
+        "name": "Add Character Sheet Buttons",
+        "hint": "Add Session Advancement button to character sheets"
+      },
+      "trackSessionHistory": {
+        "name": "Track Session History",
+        "hint": "Save session advancement history in actor flags"
+      },
+      "useWeaknessRule": {
+        "name": "Use Weakness Optional Rule",
+        "hint": "Enable the weakness question in session advancement (optional rule from rulebook)"
+      },
+      "hideParticipated": {
+        "name": "Hide 'Did you participate in the game session?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "hideExplored": {
+        "name": "Hide 'Did you explore a new location?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "hideDefeated": {
+        "name": "Hide 'Did you defeat one or more dangerous adversaries?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "hideOvercame": {
+        "name": "Hide 'Did you overcome an obstacle without using force?'",
+        "hint": "Hide this advancement question from the dialog"
+      },
+      "customQuestions": {
+        "name": "Custom Advancement Questions",
+        "hint": "Add custom advancement questions separated by semicolons. Each 'yes' answer grants 1 mark. Example: Did you roleplay your character well?; Did you help the party succeed?; Did you contribute to the story?"
+      },
+      "advancementRollMode": {
+        "name": "Advancement Roll Mode",
+        "hint": "Choose how skill advancement rolls are handled in Step 3. Bulk: Roll all skills at once with one summary. Individual: Click each skill to roll them one at a time.",
+        "bulk": "Bulk Rolling (Roll All at Once)",
+        "individual": "Individual Rolling (Click Each Skill)"
+      },
+      "debugMode": {
+        "name": "Debug Mode",
+        "hint": "Enable detailed console logging for troubleshooting"
+      }
+    },
+
+    "questions": {
+      "participated": "Czy brałeś udział w sesji?",
+      "explored": "Czy spenetrowałeś nowe miejsce?",
+      "defeated": "Czy pokonałeś jednego albo kilku groźnych przeciwników?",
+      "overcame": "Czy przezwyciężyłeś wyzwanie bez użycia siły?",
+      "weaknessQuestion": "Czy uległeś swojej Przywarze?",
+      "weaknessNone": "Nie ulegnięto Przywarze",
+      "weaknessGaveIn": "Ulegnięto swojej Przywarze",
+      "weaknessOvercame": "Pokonano Przywarę",
+      "weaknessGaveInMarks": "(+1 znacznik)",
+      "weaknessOvercameMarks": "(+2 znaczniki, usuwa Przywarę)"
+    },
+
+    "steps": {
+      "questions": "Pytania",
+      "select": "Wybierz Umiejętności",
+      "roll": "Czas na rzuty"
+    },
+
+    "instructions": {
+      "questions": "Odpowiedz na pytania poniżej. Każdy znacznik „tak” pozwoli ci zaznaczyć kolejną kratkę obok nieoznaczonej jeszcze, wybranej umiejętności.",
+      "selectMore": "Wybierz umiejętności do rozwoju. Pozostały Ci jeszcze Znaczniki rozwoju.",
+      "readyToMark": "Należy kliknąć 'Zaznacz wybrane Umiejętności', gdy będzie się gotowym do kontynuowania.",
+      "readyToRoll": "Kliknij 'Rzuć za wszystkie Rozwinięcia' aby wyturlać za wszystkie zaznaczone do rozwoju umiejętności.",
+      "readyToRollIndividual": "Kliknij w umiejętności, aby rzucić nimi pojedynczo. Po rzucie wszystkimi kliknij „Zakończ sesję”, aby zakończyć.",
+      "allSkillsRolled": "Wszystkie rzuty na rozwój umiejętności zostały wykonane! Kliknij „Zakończ sesję”, aby zakończyć i zapisać wyniki.",
+      "advancementRule": "Jeżeli wynik przewyższa twój obecny poziom umiejętności, to poziom zostanie podniesiony o 1, do maksimum 18.",
+      "noMarksToUse": "Brak dostępnych Znaczników rozwoju. Kliknij 'Dalej' żeby przejść do rzutów.",
+      "noSkills": "No skills available to mark. Answer the questions first to earn marks, or return to your character sheet to clear some existing marks.",
+      "noMarkedSkills": "No skills are currently marked for advancement. Use the 'Select Skills' step to mark some, or mark them on your character sheet."
+    },
+
+    "labels": {
+      "marksAvailable": "Znaczniki rozwoju dostępne",
+      "marksEarned": "Znaczniki rozwoju zyskane",
+      "level": "Poziom",
+      "yourWeakness": "Twoja Przywara"
+    },
+
+    "window": {
+      "title": "Rozwój po sesji: {actor}"
+    },
+
+    "buttons": {
+      "sessionAdvancement": "Rozwój po Sesji",
+      "markSelected": "Zaznacz wybrane Umiejętności",
+      "rollAdvancement": "Rzuć za wszystkie Rozwinięcia",
+      "completeSession": "Zakończ sesję",
+      "next": "Dalej",
+      "cancel": "Anuluj"
+    },
+
+    "dialog": {
+      "confirmRoll": {
+        "title": "Potwierdź rzuty o Rozwój",
+        "content": "Rzucić na Rozwój dla {count} zaznaczonych umiejętności?",
+        "yes": "Rzuć za wszystkie",
+        "no": "Anuluj"
+      },
+      "confirmComplete": {
+        "title": "Zakończ sesję",
+        "content": "Finalizować Rozwój po Sesji? Spowoduje to zapisanie wszystkich rzutów w dzienniku i zamknięcie okna dialogowego.",
+        "yes": "Finalizuj i Zapisz",
+        "no": "Anuluj"
+      },
+      "confirmCancel": {
+        "title": "Cancel Advancement",
+        "content": "This will revert all rolled skills and remove marks added this session. Are you sure?",
+        "yes": "Cofnij Wszystko",
+        "no": "Pozostań i kontynuuj"
+      },
+      "removeWeakness": {
+        "title": "Usuń Przywarę",
+        "content": "Pokonano przywarę! Usunąć ją z Twojej karty postaci? Musisz kolejną sesję rozegrać wolny/a od wad. Dopiero potem wolno ci wybrać nową, najlepiej związaną z przebiegiem rozgrywki.",
+        "yes": "Usuń Przywarę",
+        "cancel": "Zachowaj Przywarę"
+      }
+    },
+
+    "warnings": {
+      "noMoreMarks": "You have used all available advancement marks.",
+      "noSkillsSelected": "Wybierz co najmniej jedną umiejętność do rozwoju.",
+      "noMarkedSkills": "Żadna z umiejętności nie jest zaznaczona do rozwoju."
+    },
+
+    "notifications": {
+      "skillMaxed": "{skill} osiągnął max poziom (18)! {actor} może wybrać nową Zdolność heroiczną:.",
+      "weaknessRemoved": "Przywara usunięta z karty postaci.",
+      "advancementCancelled": "Rozwój anulowany - przywrócono poziomy umiejętności."
+    },
+
+    "chat": {
+      "sessionSummary": {
+        "title": "Rozwój po Sesji: {actor}",
+        "marksUsed": "Znaczniki rozwoju użyte: {count}",
+        "skillsAdvanced": "Poziomy Umiejętności podniesione: {count}",
+        "heroicAbilitiesGained": "Zdolności heroiczne uzyskane: {count}",
+        "maxSkillLevel": "Max poziom 18"
+      }
+    },
+
+    "journal": {
+      "folderName": "Historia Rozwoju",
+      "advancementQuestions": "Pytania o Rozwój",
+      "weakness": "Przywara",
+      "currentWeakness": "Aktualna Przywara:",
+      "gaveInToWeakness": "Ulegnięto swojej Przywarze:",
+      "gaveInDescription": "Postać uległa swojej Przywarze i otrzymała Znacznik Rozwoju.",
+      "overcameWeakness": "Pokonano przywarę:",
+      "overcameDescription": "Postać zachowywała się w sposób wyraźnie sprzeczny ze swoją Przywarą i otrzymała dwa Znaczniki Rozwoju.",
+      "advancementMarks": "Znaczniki Rozwoju",
+      "totalMarks": "Suma Znaczników Rozwoju:",
+      "fromQuestions": "Za Pytania:",
+      "fromAutoMarks": "Za automatyczne Znaczniki (wyturlanie Smoka albo Demona):",
+      "results": "Wyniki",
+      "skillsAdvanced": "Rozwinięte Umiejętności:",
+      "of": "z",
+      "maxLevelHeroic": "(Max Poziom 18 - Zdolność heroiczna!)",
+      "skillsNotAdvanced": "Umijejętności, których nie udało się rozwinąć:",
+      "remainedAt": "nadal na poziomie",
+      "heroicAbilityGained": "1 Zdolność heroiczna otrzymana:",
+      "heroicAbilitiesGained": "{count} Zdolności heroicznych otrzymano:",
+      "heroicDescription": "Postać osiągnąła max poziom (18) i może wybrać nową Zdolność heroiczną."
+    },
+
+    "errors": {
+      "socketlibRequired": "Dragonbane Campaign Assistant requires the socketlib module to be installed and active."
+    }
+  }
+}
