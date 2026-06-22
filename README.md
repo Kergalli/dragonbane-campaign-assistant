@@ -1,6 +1,6 @@
 # Dragonbane Campaign Assistant
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.0.1-blue)
 ![Foundry Version](https://img.shields.io/badge/foundry-v14-green)
 ![System](https://img.shields.io/badge/system-dragonbane-orange)
 
@@ -178,6 +178,7 @@ Both modes include:
 ### **Community Contributors**
 
 - **LuckyFrico** - Italian language localization
+- **GregorHak** - Polish language localization
 
 ---
 

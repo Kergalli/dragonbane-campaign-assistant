@@ -2,6 +2,28 @@
 
 All notable changes to the Dragonbane Campaign Assistant module will be documented in this file.
 
+## [2.0.1] - 2026-06-21
+
+### 🌍 Localization
+
+#### 🇵🇱 Polish Language Support
+
+- **Polish Localization**: Complete Polish translation now available (contribution by **GregorHak**)
+- **Full Coverage**: All user-facing language has been fully translated
+
+### 🐛 Bug Fixes
+
+**Journal Formatting**
+
+- **Fixed Italic Journal Text**: Advancement journal entries no longer render entirely in italics
+
+### 🔧 Compatibility
+
+- **Foundry V14 Update Fix**: Removed the `compatibility.maximum` ceiling from the manifest
+  - **Impact**: The previous `"maximum": "14"` value was read as "up to 14.0," which blocked in-app updates for users on later v14 builds (e.g. 14.364) and surfaced as a "Manifest is different" error. Updates through Foundry's module manager now work normally
+
+---
+
 ## [2.0.0] - 2026-06-17
 
 ### 🚀 Major Release - Foundry V14 & Dragonbane v4.x Compatibility
