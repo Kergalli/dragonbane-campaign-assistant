@@ -85,7 +85,11 @@
       "marksAvailable": "Utvecklingsmarkeringar tillgängliga",
       "marksEarned": "Utvecklingsmarkeringar intjänade",
       "level": "Nivå",
-      "yourWeakness": "Din svaghet"
+      "yourWeakness": "Din svaghet",
+      "learnSpellHeading": "Lära sig magi",
+      "learnSpell": "Besvärjelser att lära från en lärare (1 markering styck)",
+      "addSpellMark": "Tilldela en markering till besvärjelseinlärning",
+      "removeSpellMark": "Ta bort en markering från besvärjelseinlärning"
     },
 
     "window": {
@@ -131,6 +135,7 @@
     "warnings": {
       "noMoreMarks": "Du har använt alla tillgängliga utvecklingsmarkeringar.",
       "noSkillsSelected": "Välj minst en färdighet att markera.",
+      "noMarksAllocated": "Tilldela minst ett förbättringskryss innan du fortsätter.",
       "noMarkedSkills": "Inga färdigheter är markerade för utveckling."
     },
 
@@ -147,7 +152,9 @@
         "skillsAdvanced": "Färdigheter utvecklade: {count}",
         "heroicAbilitiesGained": "Heroiska förmågor erhållna: {count}",
         "maxSkillLevel": "Max nivå 18",
-        "noneAdvanced": "Inga färdigheter utvecklades denna session."
+        "noneAdvanced": "Inga färdigheter utvecklades denna session.",
+        "spellsLearned": "Besvärjelser inlärda från en lärare: {count}",
+        "spellReminder": "Kom ihåg: varje besvärjelse kräver ett slag mot INT med fördel för att läras in. Besvärjelsen kan inte aktiveras förrän spelpasset är slut."
       }
     },
 
@@ -164,6 +171,7 @@
       "totalMarks": "Totala markeringar:",
       "fromQuestions": "Från frågor:",
       "fromAutoMarks": "Från auto-markeringar (Drake/Demon-slag):",
+      "spentOnSpells": "Använt till inlärning av besvärjelser (från lärare):",
       "results": "Resultat",
       "skillsAdvanced": "Färdigheter utvecklade:",
       "of": "av",

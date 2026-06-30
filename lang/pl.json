@@ -85,7 +85,11 @@
       "marksAvailable": "Znaczniki rozwoju dostępne",
       "marksEarned": "Znaczniki rozwoju zyskane",
       "level": "Poziom",
-      "yourWeakness": "Twoja Przywara"
+      "yourWeakness": "Twoja Przywara",
+      "learnSpellHeading": "Nauka magii",
+      "learnSpell": "Zaklęcia do nauczenia od nauczyciela (1 znacznik za każde)",
+      "addSpellMark": "Przydziel znacznik do nauki zaklęć",
+      "removeSpellMark": "Usuń znacznik z nauki zaklęć"
     },
 
     "window": {
@@ -131,6 +135,7 @@
     "warnings": {
       "noMoreMarks": "You have used all available advancement marks.",
       "noSkillsSelected": "Wybierz co najmniej jedną umiejętność do rozwoju.",
+      "noMarksAllocated": "Przydziel co najmniej jeden Znacznik rozwoju, zanim przejdziesz dalej.",
       "noMarkedSkills": "Żadna z umiejętności nie jest zaznaczona do rozwoju."
     },
 
@@ -146,7 +151,9 @@
         "marksUsed": "Znaczniki rozwoju użyte: {count}",
         "skillsAdvanced": "Poziomy Umiejętności podniesione: {count}",
         "heroicAbilitiesGained": "Zdolności heroiczne uzyskane: {count}",
-        "maxSkillLevel": "Max poziom 18"
+        "maxSkillLevel": "Max poziom 18",
+        "spellsLearned": "Zaklęcia nauczone od nauczyciela: {count}",
+        "spellReminder": "Pamiętaj: nauczenie się każdego zaklęcia wymaga rzutu na INT z ułatwieniem. Zaklęcia nie można aktywować przed końcem sesji."
       }
     },
 
@@ -163,6 +170,7 @@
       "totalMarks": "Suma Znaczników Rozwoju:",
       "fromQuestions": "Za Pytania:",
       "fromAutoMarks": "Za automatyczne Znaczniki (wyturlanie Smoka albo Demona):",
+      "spentOnSpells": "Wydane na naukę zaklęć (od nauczyciela):",
       "results": "Wyniki",
       "skillsAdvanced": "Rozwinięte Umiejętności:",
       "of": "z",

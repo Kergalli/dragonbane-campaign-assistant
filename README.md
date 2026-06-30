@@ -1,6 +1,6 @@
 # Dragonbane Campaign Assistant
 
-![Version](https://img.shields.io/badge/version-2.0.1-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![Foundry Version](https://img.shields.io/badge/foundry-v14-green)
 ![System](https://img.shields.io/badge/system-dragonbane-orange)
 
@@ -54,7 +54,13 @@ Both modes include:
 - **Automatic chat messages** - Individual skill roll results posted to chat
 - **Full journal recording** - Complete session history with all advancement details
 
-**Automatic GM Journals:**
+**Learning Magic from a Teacher:**
+
+- **Spend Marks on Spells** - Spellcasters can allocate advancement marks to learning new spells from a teacher instead of raising skill levels
+  - Appears in Step 2 only for characters who know a school of magic
+  - Reports spell learning to chat and the advancement journal, with a reminder of the INT roll (with a boon) needed to learn each spell
+
+  **Automatic GM Journals:**
 
 - **One journal per character** - Organized in "Advancement History" folder
 - **Session summaries** - Date, questions answered, weakness engagement, marks used, skills advanced, number of heroic abilities gained

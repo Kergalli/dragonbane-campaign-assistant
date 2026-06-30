@@ -32,6 +32,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     this.customQuestionAnswers = {}; // Track custom question answers separately
     this.additionalMarks = 0;
     this.selectedSkills = new Set();
+    this.spellMarks = 0; // Marks allocated to learning spells from a teacher (Step 2)
     this.currentStep = 1; // Track which step we're on (1, 2, or 3)
 
     // Track which skills were already marked when dialog opened
@@ -71,6 +72,8 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     },
     actions: {
       markSkill: SessionAdvancementDialog.prototype._onMarkSkill,
+      addSpellMark: SessionAdvancementDialog.prototype._onAddSpellMark,
+      removeSpellMark: SessionAdvancementDialog.prototype._onRemoveSpellMark,
       rollSingleSkill: SessionAdvancementDialog.prototype._onRollSingleSkill,
       rollAdvancement: SessionAdvancementDialog.prototype._onRollAdvancement,
       completeSession: SessionAdvancementDialog.prototype._onCompleteSession,
@@ -102,6 +105,13 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
 
     const markedSkills = Utils.getMarkedSkills(this.actor);
     const unmarkedSkills = Utils.getUnmarkedSkills(this.actor);
+
+    // Spell-learning guard: only offer the option if the actor knows at least one
+    // school of magic. The system tags schools with skillType === "magic"
+    // (distinct from "secondary"), which is locale-independent and needs no word list.
+    const hasMagicSchool = this.actor.items.some(
+      (i) => i.type === "skill" && i.system.skillType === "magic",
+    );
 
     // In individual mode Step 3, we need to show ALL skills that were marked at start of Step 3
     // (not just those with advance flag), so include rolled skills
@@ -226,8 +236,22 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
         taught: !!s.system.taught,
       })),
       additionalMarks: this.additionalMarks,
-      marksRemaining: this.additionalMarks - this.selectedSkills.size,
-      canAddMore: this.selectedSkills.size < this.additionalMarks,
+      marksRemaining:
+        this.additionalMarks - this.selectedSkills.size - this.spellMarks,
+      canAddMore:
+        this.selectedSkills.size + this.spellMarks < this.additionalMarks,
+      hasSelectedSkills: this.selectedSkills.size > 0,
+      hasMarkedSkills: allSkillsForDisplay.length > 0,
+      // Spell-learning allocator (Step 2)
+      hasMagicSchool: hasMagicSchool,
+      spellMarks: this.spellMarks,
+      hasSpellMarks: this.spellMarks > 0,
+      canAddSpellMark:
+        hasMagicSchool &&
+        this.selectedSkills.size + this.spellMarks < this.additionalMarks,
+      // True when the player has allocated marks to skills OR spells this session.
+      // Drives the Step 2 hint text and the "Mark Selected" button visibility.
+      hasAllocations: this.selectedSkills.size > 0 || this.spellMarks > 0,
       hasSelectedSkills: this.selectedSkills.size > 0,
       hasMarkedSkills: allSkillsForDisplay.length > 0,
       // Mode flags
@@ -285,7 +309,7 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       this.selectedSkills.delete(skillId);
     } else {
       // Check if we can add more
-      if (this.selectedSkills.size >= this.additionalMarks) {
+      if (this.selectedSkills.size + this.spellMarks >= this.additionalMarks) {
         ui.notifications.warn(
           Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMoreMarks"),
         );
@@ -298,6 +322,46 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
     await this.render();
 
     // Restore scroll position after render
+    await this.#restoreScrollPosition(scrollTop);
+  }
+
+  /**
+   * Allocate one advancement mark to learning a spell from a teacher (Step 2)
+   */
+  async _onAddSpellMark(event, target) {
+    event?.preventDefault?.();
+
+    // Respect the shared mark budget
+    if (this.selectedSkills.size + this.spellMarks >= this.additionalMarks) {
+      ui.notifications.warn(
+        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMoreMarks"),
+      );
+      return;
+    }
+
+    const skillList = this.element?.querySelector(".skill-list");
+    const scrollTop = skillList ? skillList.scrollTop : 0;
+
+    this.spellMarks += 1;
+
+    await this.render();
+    await this.#restoreScrollPosition(scrollTop);
+  }
+
+  /**
+   * Remove one advancement mark previously allocated to spell learning (Step 2)
+   */
+  async _onRemoveSpellMark(event, target) {
+    event?.preventDefault?.();
+
+    if (this.spellMarks <= 0) return;
+
+    const skillList = this.element?.querySelector(".skill-list");
+    const scrollTop = skillList ? skillList.scrollTop : 0;
+
+    this.spellMarks -= 1;
+
+    await this.render();
     await this.#restoreScrollPosition(scrollTop);
   }
 
@@ -509,9 +573,9 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
   async _onComplete(event, target) {
     event?.preventDefault?.(); // Prevent form submission
 
-    if (this.selectedSkills.size === 0) {
+    if (this.selectedSkills.size === 0 && this.spellMarks === 0) {
       ui.notifications.warn(
-        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noSkillsSelected"),
+        Utils.localize("CAMPAIGN_ASSISTANT.warnings.noMarksAllocated"),
       );
       return;
     }
@@ -675,6 +739,10 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       }
     }
 
+    // Spell marks are tracked only in memory (no actor writes), so clearing the
+    // counter is the complete revert.
+    this.spellMarks = 0;
+
     await this.close();
   }
 
@@ -728,6 +796,17 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
           )}</strong></p>`
         : "";
 
+    const spellLearningLine =
+      this.spellMarks > 0
+        ? `<p><strong>${Utils.format(
+            "CAMPAIGN_ASSISTANT.chat.sessionSummary.spellsLearned",
+            { count: this.spellMarks },
+          )}</strong></p>
+           <p><em>${Utils.localize(
+             "CAMPAIGN_ASSISTANT.chat.sessionSummary.spellReminder",
+           )}</em></p>`
+        : "";
+
     const content = `
       <div class="dragonbane campaign-assistant session-summary">
         <h3>${Utils.format("CAMPAIGN_ASSISTANT.chat.sessionSummary.title", {
@@ -735,13 +814,14 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
         })}</h3>
         <p><strong>${Utils.format(
           "CAMPAIGN_ASSISTANT.chat.sessionSummary.marksUsed",
-          { count: results.length },
+          { count: results.length + this.spellMarks },
         )}</strong></p>
         <p><strong>${Utils.format(
           "CAMPAIGN_ASSISTANT.chat.sessionSummary.skillsAdvanced",
           { count: successCount },
         )}</strong></p>
         ${heroicAbilitiesLine}
+        ${spellLearningLine}
         ${
           successCount > 0
             ? `<ul>${successList}</ul>`
@@ -799,8 +879,17 @@ export class SessionAdvancementDialog extends HandlebarsApplicationMixin(
       // Marks breakdown
       marks: {
         fromQuestions: this.additionalMarks,
-        fromAutoMarks: results.length - this.additionalMarks,
-        total: results.length,
+        // Count auto-marks (Dragon/Demon rolls from play) directly by membership,
+        // rather than inferring by subtraction. This stays correct even when some
+        // earned marks are spent on spells or left unspent.
+        fromAutoMarks: results.filter((r) =>
+          this.originalMarkedSkills.has(r.skillId),
+        ).length,
+        spentOnSpells: this.spellMarks,
+        // "Total Marks" = marks accounted for, so the section sums correctly.
+        // results.length already includes auto-marked rolled skills; spell marks
+        // are added since they don't appear in results.
+        total: results.length + this.spellMarks,
       },
 
       // Skills selected in Step 2 (newly marked this session)

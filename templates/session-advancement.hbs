@@ -27,7 +27,7 @@
     <em>{{localize "CAMPAIGN_ASSISTANT.instructions.questions"}}</em>
     {{/if}}
     {{#if isStep2}}
-      {{#if hasSelectedSkills}}
+      {{#if hasAllocations}}
       <em>{{localize "CAMPAIGN_ASSISTANT.instructions.readyToMark"}}</em>
       {{else if canAddMore}}
       <em>{{localize "CAMPAIGN_ASSISTANT.instructions.selectMore"}}</em>
@@ -169,6 +169,36 @@
         {{/each}}
       </div>
     </div>
+
+    {{!-- Spell Learning Allocator - only if the actor knows a school of magic --}}
+    {{#if hasMagicSchool}}
+    <div class="text-box-editor spell-learning-section">
+      <div class="label-container">
+        <label>{{localize "CAMPAIGN_ASSISTANT.labels.learnSpellHeading"}}</label>
+      </div>
+
+      <div class="spell-learning-allocator">
+        <span class="spell-learning-label">
+          {{localize "CAMPAIGN_ASSISTANT.labels.learnSpell"}}
+        </span>
+        <div class="spell-mark-stepper">
+          <button type="button" data-action="removeSpellMark"
+                  class="spell-mark-btn"
+                  {{#unless hasSpellMarks}}disabled{{/unless}}
+                  aria-label="{{localize "CAMPAIGN_ASSISTANT.labels.removeSpellMark"}}">
+            <i class="fas fa-minus"></i>
+          </button>
+          <span class="spell-mark-count">{{spellMarks}}</span>
+          <button type="button" data-action="addSpellMark"
+                  class="spell-mark-btn"
+                  {{#unless canAddSpellMark}}disabled{{/unless}}
+                  aria-label="{{localize "CAMPAIGN_ASSISTANT.labels.addSpellMark"}}">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    {{/if}}   
     {{else}}
     <div class="empty-state">
       <p><em>{{localize "CAMPAIGN_ASSISTANT.instructions.noSkills"}}</em></p>
@@ -239,7 +269,7 @@
       <i class="fas fa-times"></i>
       <span>{{localize "CAMPAIGN_ASSISTANT.buttons.cancel"}}</span>
     </button>
-    {{#if hasSelectedSkills}}
+    {{#if hasAllocations}}
     <button type="submit" data-action="complete">
       <i class="fas fa-check"></i>
       <span>{{localize "CAMPAIGN_ASSISTANT.buttons.markSelected"}}</span>

@@ -221,6 +221,9 @@ class DragonbaneCampaignAssistant {
     entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.totalMarks")}</strong> ${marks.total}</li>`;
     entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromQuestions")}</strong> ${marks.fromQuestions}</li>`;
     entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.fromAutoMarks")}</strong> ${marks.fromAutoMarks}</li>`;
+    if (marks.spentOnSpells > 0) {
+      entryHTML += `<li><strong>${Utils.localize("CAMPAIGN_ASSISTANT.journal.spentOnSpells")}</strong> ${marks.spentOnSpells}</li>`;
+    }
     entryHTML += `</ul>`;
     entryHTML += `</blockquote>`;
 

@@ -85,7 +85,11 @@
       "marksAvailable": "Marchi di Avanzamento Disponibili",
       "marksEarned": "Marchi di Avanzamento Guadagnati",
       "level": "Livello",
-      "yourWeakness": "La Tua Debolezza"
+      "yourWeakness": "La Tua Debolezza",
+      "learnSpellHeading": "Imparare la Magia",
+      "learnSpell": "Incantesimi da imparare da un insegnante (1 marchio ciascuno)",
+      "addSpellMark": "Assegna un marchio all'apprendimento di incantesimi",
+      "removeSpellMark": "Rimuovi un marchio dall'apprendimento di incantesimi"
     },
 
     "window": {
@@ -131,6 +135,7 @@
     "warnings": {
       "noMoreMarks": "Hai usato tutti i marchi di avanzamento disponibili.",
       "noSkillsSelected": "Seleziona almeno un'abilità da marcare.",
+      "noMarksAllocated": "Assegna almeno un segno di avanzamento prima di continuare.",
       "noMarkedSkills": "Nessuna abilità è marcata per l'avanzamento."
     },
 
@@ -147,7 +152,9 @@
         "skillsAdvanced": "Abilità avanzate: {count}",
         "heroicAbilitiesGained": "Abilità eroiche ottenute: {count}",
         "maxSkillLevel": "Livello Max 18",
-        "noneAdvanced": "Nessuna abilità è avanzata questa sessione."
+        "noneAdvanced": "Nessuna abilità è avanzata questa sessione.",
+        "spellsLearned": "Incantesimi appresi da un insegnante: {count}",
+        "spellReminder": "Ricorda: ogni incantesimo richiede un tiro contro INT con un vantaggio per essere appreso. L'incantesimo non può essere attivato fino alla fine della sessione."
       }
     },
 
@@ -164,6 +171,7 @@
       "totalMarks": "Marchi totali:",
       "fromQuestions": "Dalle domande:",
       "fromAutoMarks": "Dai marchi automatici (tiri Drago/Demone):",
+      "spentOnSpells": "Speso per apprendere incantesimi (da un insegnante):",
       "results": "Risultati",
       "skillsAdvanced": "Abilità avanzate:",
       "of": "di",

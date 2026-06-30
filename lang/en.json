@@ -85,7 +85,11 @@
       "marksAvailable": "Advancement Marks Available",
       "marksEarned": "Advancement Marks Earned",
       "level": "Level",
-      "yourWeakness": "Your Weakness"
+      "yourWeakness": "Your Weakness",
+      "learnSpellHeading": "Learning Magic",
+      "learnSpell": "Spells to learn from a teacher (1 mark each)",
+      "addSpellMark": "Allocate a mark to spell learning",
+      "removeSpellMark": "Remove a mark from spell learning"
     },
 
     "window": {
@@ -131,6 +135,7 @@
     "warnings": {
       "noMoreMarks": "You have used all available advancement marks.",
       "noSkillsSelected": "Select at least one skill to mark.",
+      "noMarksAllocated": "Allocate at least one advancement mark before continuing.",
       "noMarkedSkills": "No skills are marked for advancement."
     },
 
@@ -147,7 +152,9 @@
         "skillsAdvanced": "Skills advanced: {count}",
         "heroicAbilitiesGained": "Heroic abilities gained: {count}",
         "maxSkillLevel": "Max Level 18",
-        "noneAdvanced": "No skills advanced this session."
+        "noneAdvanced": "No skills advanced this session.",
+        "spellsLearned": "Spells learned from a teacher: {count}",
+        "spellReminder": "Remember: each spell requires a roll against INT with a boon to learn it. The spell cannot be activated until the end of the session."
       }
     },
 
@@ -164,6 +171,7 @@
       "totalMarks": "Total Marks:",
       "fromQuestions": "From Questions:",
       "fromAutoMarks": "From Auto-Marks (Dragon/Demon rolls):",
+      "spentOnSpells": "Spent Learning Spells (from a teacher):",
       "results": "Results",
       "skillsAdvanced": "Skills Advanced:",
       "of": "of",

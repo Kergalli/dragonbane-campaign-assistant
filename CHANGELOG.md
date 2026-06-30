@@ -2,6 +2,24 @@
 
 All notable changes to the Dragonbane Campaign Assistant module will be documented in this file.
 
+## [2.1.0] - 2026-06-29
+
+### ✨ Added - Learning Magic from a Teacher
+
+Implements the "learn a spell from a teacher" option from the magic rules, letting a spellcaster spend advancement marks on learning new spells instead of increasing skill levels.
+
+**Spell Learning Allocator (Step 2)**
+
+- **New Allocator Control**: A stepper in Step 2 lets players allocate one or more advancement marks to learning spells from a teacher
+  - Marks spent on spell learning draw from the same pool as skill marks — the available-marks counter accounts for both
+  - The control only appears for characters who know at least one school of magic, detected via the system's `skillType: "magic"` tag (no maintained spell-school list, works with homebrew schools and in any language)
+- **Reporting, Not Adjudication**: The module records that marks were spent learning spells; it does not pick the spell or roll for you
+  - **Chat Summary**: Reports the number of spells learned and includes a rules reminder
+  - **Journal**: Advancement journal entries now include a "Spent Learning Spells" line in the Advancement Marks breakdown when applicable
+- **Roll-Mode Agnostic**: Spell marks are resolved the moment they are allocated, so they pass through both Bulk and Individual rolling modes untouched
+
+---
+
 ## [2.0.1] - 2026-06-21
 
 ### 🌍 Localization
