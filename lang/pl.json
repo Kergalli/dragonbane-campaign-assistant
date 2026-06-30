@@ -70,7 +70,7 @@
 
     "instructions": {
       "questions": "Odpowiedz na pytania poniżej. Każdy znacznik „tak” pozwoli ci zaznaczyć kolejną kratkę obok nieoznaczonej jeszcze, wybranej umiejętności.",
-      "selectMore": "Wybierz umiejętności do rozwoju. Pozostały Ci jeszcze Znaczniki rozwoju.",
+      "selectMore": "Wybierz umiejętności do rozwoju. Pozostały Ci jeszcze Znaczniki rozwoju do rozdysponowania.",
       "readyToMark": "Należy kliknąć 'Zaznacz wybrane Umiejętności', gdy będzie się gotowym do kontynuowania.",
       "readyToRoll": "Kliknij 'Rzuć za wszystkie Rozwinięcia' aby wyturlać za wszystkie zaznaczone do rozwoju umiejętności.",
       "readyToRollIndividual": "Kliknij w umiejętności, aby rzucić nimi pojedynczo. Po rzucie wszystkimi kliknij „Zakończ sesję”, aby zakończyć.",
@@ -78,7 +78,7 @@
       "advancementRule": "Jeżeli wynik przewyższa twój obecny poziom umiejętności, to poziom zostanie podniesiony o 1, do maksimum 18.",
       "noMarksToUse": "Brak dostępnych Znaczników rozwoju. Kliknij 'Dalej' żeby przejść do rzutów.",
       "noSkills": "No skills available to mark. Answer the questions first to earn marks, or return to your character sheet to clear some existing marks.",
-      "noMarkedSkills": "No skills are currently marked for advancement. Use the 'Select Skills' step to mark some, or mark them on your character sheet."
+      "noMarkedSkills": "Nie oznaczono Znacznikiem rozwoju umiejętności. Podczas kroku 'Wybierz Umiejętności' albo na karcie postaci zaznacz umiejętności do rozwoju."
     },
 
     "labels": {
@@ -87,9 +87,9 @@
       "level": "Poziom",
       "yourWeakness": "Twoja Przywara",
       "learnSpellHeading": "Nauka magii",
-      "learnSpell": "Zaklęcia do nauczenia od nauczyciela (1 znacznik za każde)",
-      "addSpellMark": "Przydziel znacznik do nauki zaklęć",
-      "removeSpellMark": "Usuń znacznik z nauki zaklęć"
+      "learnSpell": "Czary do nauczenia od nauczyciela (1 znacznik za każde)",
+      "addSpellMark": "Przydziel znacznik do nauki czarów",
+      "removeSpellMark": "Usuń znacznik z nauki czarów"
     },
 
     "window": {
@@ -133,7 +133,7 @@
     },
 
     "warnings": {
-      "noMoreMarks": "You have used all available advancement marks.",
+      "noMoreMarks": "Przydzieliłeś już wszystkie dostępne Znacznika rozwoju.",
       "noSkillsSelected": "Wybierz co najmniej jedną umiejętność do rozwoju.",
       "noMarksAllocated": "Przydziel co najmniej jeden Znacznik rozwoju, zanim przejdziesz dalej.",
       "noMarkedSkills": "Żadna z umiejętności nie jest zaznaczona do rozwoju."
@@ -152,8 +152,8 @@
         "skillsAdvanced": "Poziomy Umiejętności podniesione: {count}",
         "heroicAbilitiesGained": "Zdolności heroiczne uzyskane: {count}",
         "maxSkillLevel": "Max poziom 18",
-        "spellsLearned": "Zaklęcia nauczone od nauczyciela: {count}",
-        "spellReminder": "Pamiętaj: nauczenie się każdego zaklęcia wymaga rzutu na INT z ułatwieniem. Zaklęcia nie można aktywować przed końcem sesji."
+        "spellsLearned": "Czary nauczone od nauczyciela: {count}",
+        "spellReminder": "Pamiętaj: nauczenie się każdego czaru wymaga testu INT z błyskiem. Nowego czaru nie możesz użyć podczas tej sesji."
       }
     },
 
@@ -170,7 +170,7 @@
       "totalMarks": "Suma Znaczników Rozwoju:",
       "fromQuestions": "Za Pytania:",
       "fromAutoMarks": "Za automatyczne Znaczniki (wyturlanie Smoka albo Demona):",
-      "spentOnSpells": "Wydane na naukę zaklęć (od nauczyciela):",
+      "spentOnSpells": "Wydane na naukę czarów (od nauczyciela):",
       "results": "Wyniki",
       "skillsAdvanced": "Rozwinięte Umiejętności:",
       "of": "z",
