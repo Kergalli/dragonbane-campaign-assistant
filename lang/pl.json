@@ -87,7 +87,7 @@
       "level": "Poziom",
       "yourWeakness": "Twoja Przywara",
       "learnSpellHeading": "Nauka magii",
-      "learnSpell": "Czary do nauczenia od nauczyciela (1 znacznik za każde)",
+      "learnSpell": "Nowe czary do nauczenia (1 znacznik za każde)",
       "addSpellMark": "Przydziel znacznik do nauki czarów",
       "removeSpellMark": "Usuń znacznik z nauki czarów"
     },
@@ -152,8 +152,9 @@
         "skillsAdvanced": "Poziomy Umiejętności podniesione: {count}",
         "heroicAbilitiesGained": "Zdolności heroiczne uzyskane: {count}",
         "maxSkillLevel": "Max poziom 18",
-        "spellsLearned": "Czary nauczone od nauczyciela: {count}",
-        "spellReminder": "Pamiętaj: nauczenie się każdego czaru wymaga testu INT z błyskiem. Nowego czaru nie możesz użyć podczas tej sesji."
+        "noneAdvanced": "Nie udało się rozwinąć żadnej umiejętnośći.",
+        "spellsLearned": "Czary nauczone od nauczyciela lub samodzielnie: {count}",
+        "spellReminder": "Pamiętaj: nauczenie się każdego czaru wymaga testu INT z błyskiem. Jeśli uczysz się z księgi czarów, to zamiast INT testujesz JĘZYKI OBCE (bez błysku)."
       }
     },
 
@@ -175,7 +176,7 @@
       "skillsAdvanced": "Rozwinięte Umiejętności:",
       "of": "z",
       "maxLevelHeroic": "(Max Poziom 18 - Zdolność heroiczna!)",
-      "skillsNotAdvanced": "Umijejętności, których nie udało się rozwinąć:",
+      "skillsNotAdvanced": "Umiejętności, których nie udało się rozwinąć:",
       "remainedAt": "nadal na poziomie",
       "heroicAbilityGained": "1 Zdolność heroiczna otrzymana:",
       "heroicAbilitiesGained": "{count} Zdolności heroicznych otrzymano:",
